@@ -18,7 +18,7 @@ vector<int> baseNumber(int N, int digits, int x) {
   return ret;
 };
 
-// n-1までのN進数を上記のbaseNumberで返したvectorのvector
+// 0からn-1までのN進数を上記のbaseNumberで返したvectorのvector
 vector<vector<int>> baseNumbers(int n, int N, int digits) {
   vector<vector<int>> ret(n, vector<int> (digits));
   for (int i = 0; i < n; i++) {

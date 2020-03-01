@@ -1,9 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
 // 対象のvectorの [s, e)の範囲でのLIS
-int LIS(vector<int> &x, int s, int e) {
+vector<int> LIS(vector<int> &x, int s, int e) {
   int INFTY = 1e9+7;
   vector<int> ret(e - s, INFTY);
   ret[0] = x[s];
@@ -18,17 +17,19 @@ int LIS(vector<int> &x, int s, int e) {
       *lower_bound(ret.begin(), ret.end(), tmp) = tmp;
     }
   }
-  return size;
+  return vector<int> (ret.begin(), ret.begin()+size);
 };
 
 int main() {
-  vector<int> X(6);
-  for(int i = 0; i < 6; i++) {
+  vector<int> X(8);
+  for(int i = 0; i < 8; i++) {
     cin >> X[i];
   }
 
-  int ans = LIS(X, 0, X.size());
-  cout << ans << endl;
+  vector<int> ans = LIS(X, 0, X.size());
+  for (auto a: ans) {
+    cout << a << endl;
+  }
 };
 
 

@@ -32,10 +32,10 @@ class Unionfind {
     void unite(int x, int y) {
       x = root(x);
       y = root(y);
-      treeNum--;
       if (x == y) {
         return;
       }
+      treeNum--;
       if (rank[x] < rank[y]) {
         par[x] = y;
         size[y] += size[x];
