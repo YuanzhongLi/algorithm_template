@@ -13,24 +13,9 @@ using namespace std;
 #define deg2rad(deg) ((((double)deg)/((double)360)*2*M_PI))
 #define rad2deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
 #define Find(set, element) set.find(element) != set.end()
-#define Decimal(x) printf("%.10f\n", x) // 小数点を10桁まで表示
-// debug用
-#define PrintVec(x) for (auto elementPrintVec: x) { cout << elementPrintVec << " "; } cout << endl;
 
 typedef pair<int, int> PI;
 typedef pair<ll, ll> PLL;
-
-int POWINT(int x, int n) {
-  int ret = 1;
-  rep(i, 0, n) ret *= x;
-  return ret;
-};
-
-ll POWLL(int x, int n) {
-  ll ret = 1;
-  rep(i, 0, n) ret *= x;
-  return ret;
-};
 
 template<class T>
 inline bool chmax(T &a, T b) {
@@ -50,42 +35,28 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-// 101011..., LRLLR...のようなものをブロックわけしてくれる
-// ex)RRLLLLRLRRLL
-// R L R L R L
-// 2 4 1 1 2 2
+static const int MAX_M = 1000;
+static const int MAX_N = 1000;
 
-pair<vector<char>, vector<int>> Block(string s) {
-  int num = 1;
+int n, m; // nをm個以下に分割
+int dp[MAX_M+1][MAX_N+1]; // dp[i][j]: jをi個以下に分割したときの通り数
+int mod;
 
-  vector<char> v1;
-  vector<int> v2;
-
-  rep (i, 0, s.size()) {
-    char c = s[i];
-    if (i == 0) {
-      v1.pb(c);
-    } else if (c == s[i - 1]) {
-      num++;
-    } else {
-      v2.pb(num);
-      v1.pb(c);
-      num = 1;
+int solve() {
+  dp[0][0] = 1;
+  for (int i = 1; i <= m; i++) {
+    for (int j = 0; j <= n; j++) {
+      if (j - i >= 0) {
+        dp[i][j] = dp[i][j - i] + dp[i][j - i] % mod;
+      } else {
+        dp[i][j] = dp[i - 1][j] % mod;
+      }
     }
-
-    if (i == s.size() - 1) v2.pb(num);
   }
 
-  return make_pair(v1, v2);
+  return dp[m][n];
 };
 
 int main() {
-  int num = 1;
-  string S;
-  cin >> S;
-  auto block = Block(S);
 
-  PrintVec(block.first);
-  PrintVec(block.second);
 };
-

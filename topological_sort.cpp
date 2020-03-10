@@ -39,14 +39,14 @@ bool calculated[MAXV];
 int dp[MAXV]; // max length of path from v（vからstartしたときの最長経路）
 int dfs(int v) {
   if (visited[v]) {
-    if (!calculated[v]) return -1;
+    if (!calculated[v]) return -1; // 閉路検出
     return dp[v];
   }
   visited[v] = true;
   dp[v] = 1;
   for (int u: to[v]) {
     int res = dfs(u);
-    if (res == -1) return -1;
+    if (res == -1) return -1; // 閉路検出
     dp[v] = max(dp[v], res+1);
   }
   calculated[v] = true;

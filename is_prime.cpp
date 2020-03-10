@@ -42,6 +42,28 @@ int isPrime(int x) {
   return 1;
 };
 
+// 素因数分解
+// pn = { 2, 3, 5, 7 ..} 可能性のある素数列
+map<int, int> PrimeFactorization(int x, vector<int> &pn) {
+  map<int, int> ret;
+  rep(i, 0, pn.size()) {
+    ret.emplace(pn[i], 0);
+  }
+
+  int pn_idx = 0;
+  while(x > 1) {
+    int p = pn[pn_idx];
+    if (x % p == 0) {
+      x /= p;
+      ret[p]++;
+    } else {
+      pn_idx++;
+    }
+  }
+
+  return ret;
+};
+
 int main() {
 
 };
