@@ -36,7 +36,7 @@ void dijkstra(int s) {
       if (color[v] == BLACK) continue;
       if (d[v] > d[u] + adj[u][j].second) {
         d[v] = d[u] + adj[u][j].second;
-        p[v] = u;
+        p[v] = u; // 経路を求めるために親ノードを更新
         // priority_queueはデフォルトで大きい値を優先するため-1をかける
         PQ.push(make_pair(d[v] * (-1), v));
         color[v] = GRAY;

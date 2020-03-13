@@ -45,7 +45,7 @@ vector<int> divisor(int n) {
   }
   // sort(All(ret));
   return (ret);
-}
+};
 
 int main() {
   vector<int> a = divisor(100);

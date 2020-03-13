@@ -71,7 +71,7 @@ class Edge {
     }
 };
 
-int kruskal (int N, vector<Edge> edges) {
+int Kruskal (int N, vector<Edge> edges) {
   int totalCost = 0;
   sort(All(edges));
   Unionfind uf = Unionfind(N + 1);
@@ -100,5 +100,5 @@ int main() {
     edges.pb(Edge(source, target, cost));
   }
 
-  cout << kruskal(N, edges) << endl;
+  cout << Kruskal(N, edges) << endl;
 };

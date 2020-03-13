@@ -28,7 +28,7 @@ long long modinv(long long a, long long m) {
   return u;
 };
 
-long long fact[200005], inv[200005], factinv[20005];
+long long fact[200005], inv[200005], factinv[200005];
 
 void init(int m) {
   fact[0] = 1;
