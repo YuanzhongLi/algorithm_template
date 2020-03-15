@@ -41,21 +41,23 @@ inline bool chmax(T &a, T b) {
   return false;
 };
 
-static const int INF = 1e9;
+// 東京大学プログラミングコンテスト2013 H
+
+static const ll LINF = 1ll << 55;
 
 struct Edge {
   int from;
   int to;
-  int cost;
+  ll cost;
 };
 
-vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
-  vector<int> dist(V, INF);
+vector<ll> bellman_ford(int s, int V, vector<Edge> &edges) {
+  vector<ll> dist(V, LINF);
   dist[s] = 0;
   rep(i, 0, V - 1) {
     rep(j, 0, edges.size()) {
       struct Edge e = edges[j];
-      if (dist[e.from] == INF) continue;
+      if (dist[e.from] == LINF) continue;
       dist[e.to] = min(dist[e.to], dist[e.from] + e.cost);
     }
   }
@@ -63,7 +65,7 @@ vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
   bool flag = true;
   rep(i, 0, edges.size()) {
     struct Edge e = edges[i];
-    if (dist[e.from] == INF) continue;
+    if (dist[e.from] == LINF) continue;
     // 負回路発見
     if (dist[e.from] + e.cost < dist[e.to]) {
       flag = false;
@@ -74,7 +76,7 @@ vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
   if (flag) {
     return dist;
   } else {
-    vector<int> neg;
+    vector<ll> neg;
     return neg;
   }
 };
@@ -88,12 +90,51 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-struct T {
-  int a, b, c;
-};
-
 int main() {
-  vector<T> vec;
-  vec.pb(T { 1, 2, 3 });
-  cout << vec[0].a << vec[0].b << vec[0].c << endl;
+  int N, M;
+  cin >> N >> M;
+  vector<ll> p(N+1);
+  rep(i, 1, N+1) {
+    cin >> p[i];
+  }
+
+  vector<ll> q(N+1);
+  rep(i, 1, N+1) {
+    cin >> q[i];
+  }
+
+  vector<Edge> edges;
+  set<int> S;
+
+  int x, y, a, b;
+  int s = 0;
+
+  rep(i, 0, M) {
+    cin >> x >> y >> a >> b;
+    y += N;
+    edges.pb(Edge { y, x, b });
+    edges.pb(Edge { x, y, -a });
+    if (!(Find(S, x))) {
+      edges.pb(Edge { s, x, p[x] });
+      edges.pb(Edge { x, s, 0ll });
+      S.insert(x);
+    }
+    if (!(Find(S, y))) {
+      edges.pb(Edge { y, s, q[y-N] });
+      edges.pb(Edge { s, y, 0ll });
+      S.insert(y);
+    }
+  }
+
+  int V = 2*N+1;
+
+  auto res = bellman_ford(s, V, edges);
+
+  if (res.empty()) {
+    cout << "no" << endl;
+  } else {
+    cout << "yes" << endl;
+  }
+
+  return 0;
 };

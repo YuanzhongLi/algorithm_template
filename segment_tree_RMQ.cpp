@@ -46,7 +46,7 @@ static const int MAX_N = 1 << 17;
 // セグメント気を持つグローバル配列
 int n, dat[2 * MAX_N - 1];
 
-// 初期化 n_個のの要素
+// 初期化 n_個の要素
 void init(int n_) {
   // 簡単のため、要素数を2のべき乗に
   n = 1;
