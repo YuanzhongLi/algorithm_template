@@ -10,9 +10,6 @@ using namespace std;
 #define ubidx(x, y) upper_bound(x.begin(), x.end(), y) - x.begin()
 #define BiSearchRangeNum(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y)
 
-#define MAX 10000
-#define INFTY (1 << 29)
-
 class Unionfind {
   public:
     vector<int> par; // 節点
@@ -74,9 +71,8 @@ class Edge {
 int Kruskal (int N, vector<Edge> edges) {
   int totalCost = 0;
   sort(All(edges));
-  Unionfind uf = Unionfind(N + 1);
+  Unionfind uf = Unionfind(N);
 
-  int source, target;
   rep(i, 0, edges.size()) {
     Edge e = edges[i];
     if (!uf.same(e.source, e.target)) {

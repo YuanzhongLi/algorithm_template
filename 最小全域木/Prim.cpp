@@ -56,7 +56,7 @@ int cost[MAX_V][MAX_V];
 int mincost[MAX_V]; // 集合Xからの辺の最小コスト
 bool used[MAX_V]; // 頂点iがXに含まれるか
 int V;
-// O(V * E)
+// O(V^2) 隣接行列
 int Prim() {
   // 初期化
   rep(i, 0, V) {
