@@ -1,4 +1,8 @@
 .DS_Store
 file.dSYM
 file
-*/file
+./**/file
+test.cpp
+testcase.txt
+./**/test.cpp
+./**/testcase.txt

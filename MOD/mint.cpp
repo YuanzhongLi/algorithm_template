@@ -41,44 +41,6 @@ inline bool chmax(T &a, T b) {
   return false;
 };
 
-static const int INF = 1e9;
-
-struct Edge {
-  int from;
-  int to;
-  int cost;
-};
-
-vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
-  vector<int> dist(V, INF);
-  dist[s] = 0;
-  rep(i, 0, V - 1) {
-    rep(j, 0, edges.size()) {
-      struct Edge e = edges[j];
-      if (dist[e.from] == INF) continue;
-      dist[e.to] = min(dist[e.to], dist[e.from] + e.cost);
-    }
-  }
-
-  bool flag = true;
-  rep(i, 0, edges.size()) {
-    struct Edge e = edges[i];
-    if (dist[e.from] == INF) continue;
-    // 負回路発見
-    if (dist[e.from] + e.cost < dist[e.to]) {
-      flag = false;
-      break;
-    }
-  }
-
-  if (flag) {
-    return dist;
-  } else {
-    vector<int> neg;
-    return neg;
-  }
-};
-
 template<class T>
 inline bool chmin(T &a, T b) {
   if(a > b) {
@@ -88,12 +50,43 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-struct T {
-  int a, b, c;
+const int mod = 1e9+7;
+const int mod = 998244353;
+struct mint {
+  ll x;
+  mint(ll x = 0): x((x%mod+mod)%mod) {}
+  mint operator-() const { return mint(-x); }
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this; }
+  mint operator+(const mint a) const { return mint(*this) += a; }
+  mint operator-(const mint a) const { return mint(*this) -= a; }
+  mint operator*(const mint a) const { return mint(*this) *= a; }
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const { return pow(mod-2); }
+  mint& operator /= (const mint a) { return *this *= a.inv(); }
+  mint operator / (const mint a)  const { return mint(*this) /= a; }
 };
+istream& operator>>(istream& is, const mint& a) { return is >> a.x; }
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x; }
 
 int main() {
-  vector<T> vec;
-  vec.pb(T { 1, 2, 3 });
-  cout << vec[0].a << vec[0].b << vec[0].c << endl;
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+
+  return 0;
 };
