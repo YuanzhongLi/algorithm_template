@@ -70,5 +70,13 @@ bitset<10>
 // 0000000000を扱える
 // biset<n>で0(n/64)の計算量で扱える
 ```
+### 4. 重複要素削除
+uniqueは隣接する重複要素を削除し、vectorの長さを変化させないので末尾にゴミが残る(O(n))
+そこで以下のようにすることでuniqueなvectorとなる
+sortのO(nlogn)の計算量
+```
+std::sort(vec.begin(), vec.end());
+vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
+```
 
 
