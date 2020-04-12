@@ -79,4 +79,10 @@ std::sort(vec.begin(), vec.end());
 vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
 ```
 
+### 5. 立っているbitのcount
+```
+__builtin_popcount(<int>)
+__builtin_popcountll(<long long int>)
+```
+
 
