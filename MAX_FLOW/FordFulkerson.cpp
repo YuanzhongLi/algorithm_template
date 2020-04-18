@@ -57,7 +57,7 @@ class FordFulkerson {
   //辺を追加。revは,相互参照できるようにしている。sizeで実現しているが、別のルールを用いても良い(i.e ハッシュ)。逆辺の逆辺は通常の辺である。
   void addEdge(int from, int to, int cap) {
     G[from].pb((Edge) { to, cap, (int) G[to].size() });
-    G[to].pb((Edge) { from, 0, (int) G[from].size() - 1});
+    G[to].pb((Edge) { from, 0, (int) G[from].size() - 1}); // 逆辺
   }
 
   // sからtへ移動可能ならそのルートの最大流量を返し、不可能なら0を返す
@@ -86,11 +86,13 @@ class FordFulkerson {
   int max_flow(int s, int t) {
     int flow = 0;
     for (;;) {
+      // usedを初期化
       rep(i, 0, used.size()) {
         used[i] = false;
       }
+
       int f = dfs(s, t, INF);
-      if (f == 0) {
+      if (f == 0) { // もう流せない
         return flow;
       }
       flow += f;

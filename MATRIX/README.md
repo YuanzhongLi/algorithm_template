@@ -70,7 +70,7 @@ $S_{k} = I + A + ... + A^{k-1}$とすると、
 ```math
 \begin{pmatrix}
 A^k \\
-S^k
+S_k
 \end{pmatrix}
 =
 \begin{pmatrix}

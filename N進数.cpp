@@ -28,6 +28,16 @@ vector<vector<int>> baseNumbers(int n, int N, int digits) {
   return ret;
 };
 
+// xの先頭
+int top(int x) {
+  int ret = 0;
+  while (x) {
+    ret = x;
+    x /= 10;
+  }
+  return ret;
+};
+
 int main() {
   cout << "baseNumber result" << endl;
   vector<int> a;
