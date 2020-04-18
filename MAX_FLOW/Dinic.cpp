@@ -44,7 +44,7 @@ struct Dinic {
 
   int V;
   vector<vector<Edge>> G;
-  vector<int> level;
+  vector<int> level; // sからの距離
   vector<bool> used;
 
   Dinic(int V): V(V), G(V) {}
@@ -53,7 +53,7 @@ struct Dinic {
     G[from].pb((Edge){ to, cap, (int) G[to].size() });
     G[to].pb((Edge) { from, 0, (int) G[from].size()-1 });
   }
-  // sからの到達するのにかかる最短のステップ数を調べるbfsで調べる
+  // sからの到達するのにかかる最短のステップ数をbfsで調べる
   void bfs(int s) {
     level.assign(V, -1);
     queue<int> q;
