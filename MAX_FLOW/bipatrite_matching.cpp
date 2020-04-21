@@ -3,14 +3,59 @@ using namespace std;
 
 #define rep(i,s,n) for (int i = (int)s; i < (int)n; i++)
 #define ll long long
+#define ld long double
 #define pb push_back
+#define eb emplace_back
 #define All(x) x.begin(), x.end()
 #define Range(x, i, j) x.begin() + i, x.begin() + j
 #define lbidx(x, y) lower_bound(x.begin(), x.end(), y) - x.begin()
 #define ubidx(x, y) upper_bound(x.begin(), x.end(), y) - x.begin()
-#define BiSearchRangeNum(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y)
-#define deg_to_rad(deg) ((((double)deg)/((double)360)*2*M_PI))
-#define rad_to_deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
+#define llbidx(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y) // 二要素間の距離
+#define deg2rad(deg) ((((double)deg)/((double)360)*2*M_PI))
+#define rad2deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
+#define Find(set, element) set.find(element) != set.end()
+#define Decimal(x) printf("%.10f\n", x) // 小数点を10桁まで表示
+// debug用
+#define PrintVec(x) for (auto elementPrintVec: x) { cout << elementPrintVec << " "; } cout << "\n";
+#define debug(x) cerr << #x << ": " << (x) << "\n";
+#define endl "\n"
+// gcj print用
+#define Case(x) printf("Case #%d: ", x);
+
+typedef pair<int, int> PI;
+typedef pair<ll, ll> PLL;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<vector<int>>> vvvi;
+typedef vector<ll> vl;
+typedef vector<vector<ll>> vvl;
+typedef vector<vector<vector<int>>> vvvl;
+typedef vector<PI> vpi;
+typedef vector<vector<PI>> vvpi;
+typedef vector<vector<vector<PI>>> vvvpi;
+typedef vector<PLL> vpl;
+typedef vector<vector<PLL>> vvpl;
+typedef vector<vector<vector<PLL>>> vvvpl;
+
+int POWINT(int x, int n) {
+  int ret = 1;
+  while (n > 0) {
+    if (n & 1) ret *= x;
+    x *= x;
+    n >>= 1;
+  }
+  return ret;
+};
+
+ll POWLL(ll x, int n) {
+  ll ret = 1;
+  while (n > 0) {
+    if (n & 1) ret *= x;
+    x *= x;
+    n >>= 1;
+  }
+  return ret;
+};
 
 template<class T>
 inline bool chmax(T &a, T b) {
@@ -30,12 +75,7 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-// Dinic法
-// 最大流を求める。最短の増加パスを探して、そこにフローを流していくことを繰り返す。そのような経路がなくなったら残余パスでもう一度それを繰り返す。それでも、流せなくなったら終了する。
-// 計算量 O(E * V^2)
-// ただしほとんどの場合、実際の計算量より高速に動作する。
-
-static const int INF = (1<<30);
+const int INF = 1e9+7;
 
 class Dinic {
   struct Edge {
@@ -105,19 +145,31 @@ class Dinic {
   }
 };
 
-// AOJ GRL_6_A
+// AOJ GRL_7_A
 
 int main() {
-  int V, E;
-  cin >> V >> E;
-  int u, v, c;
-  Dinic d(V);
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+
+  int X, Y, E; cin >> X >> Y >> E;
+
+  Dinic dinic(X+Y+2);
+  int x, y;
+  int s = X+Y, t = X+Y+1;
   rep(i, 0, E) {
-    cin >> u >> v >> c;
-    d.addEdge(u, v, c);
+    cin >> x >> y;
+    dinic.addEdge(x, y+X, 1);
   }
-  int ans = d.max_flow(0, V - 1);
-  cout << ans << endl;
+
+  rep(x, 0, X) {
+    dinic.addEdge(s, x, 1);
+  }
+
+  rep(y, 0, Y) {
+    dinic.addEdge(y+X, t, 1);
+  }
+
+  cout << dinic.max_flow(s, t) << endl;
+
+  return 0;
 };
-
-
