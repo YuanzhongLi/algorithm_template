@@ -65,6 +65,8 @@ inline bool chmin(T &a, T b) {
 };
 
 // 対象のvectorの [s, e)の範囲でのLIS
+// O(NlogN)
+
 vector<int> LIS(vector<int> &x, int s, int e) {
   int INFTY = 1e9+7;
   vector<int> ret(e - s, INFTY);

@@ -10,6 +10,8 @@ using namespace std;
 #define ubidx(x, y) upper_bound(x.begin(), x.end(), y) - x.begin()
 #define BiSearchRangeNum(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y)
 
+// 最大共通部分列
+
 int main() {
   string s, t;
   cin >> s >> t;
