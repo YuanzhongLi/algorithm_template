@@ -74,89 +74,38 @@ inline bool chmin(T &a, T b) {
   }
   return false;
 };
-// 左づめでの10進数xをdigits桁のN進数vectorにしてを返す
-vector<int> baseNumber(int N, int digits, int x) {
-  vector<int> ret(digits, 0);
-  // 商
-  int quotient = x;
-  int counter = 0;
-  while (quotient > 0) {
-    // 余り
-    int remainder = quotient % N;
-    quotient /= N;
-    ret[counter] = remainder;
-    counter++;
+
+const int MAX_N = 100005;
+vector<vector<int>> graph;
+
+int dp[MAX_N];
+vector<bool> done(MAX_N, false);
+
+// uから最も遠い頂点との距離
+int dfs(int u, int parent) {
+  if (done[u]) return dp[u];
+  int result = 0;
+
+  for (int v: graph[u]) {
+    if (v == parent) continue; // 親方向を見ないようにする
+    chmax(result, dfs(v, u));
   }
 
-  return ret;
-};
+  dp[u] = result;
+  done[u] = true;
 
-// 左づめでの10進数xをdigits桁のN進数vectorにしてを返す
-vector<int> baseNumberLL(ll N, int digits, ll x) {
-  vector<int> ret(digits, 0);
-  // 商
-  ll quotient = x;
-  int counter = 0;
-  while (quotient) {
-    // 余り
-    ll remainder = quotient % (int)N;
-    quotient /= N;
-    ret[counter] = (int)remainder;
-    counter++;
-  }
-
-  return ret;
-};
-
-// 0からn-1までのN進数を上記のbaseNumberで返したvectorのvector
-vector<vector<int>> baseNumbers(int n, int N, int digits) {
-  vector<vector<int>> ret(n, vector<int> (digits));
-  for (int i = 0; i < n; i++) {
-    ret[i] = baseNumber(N, digits, i);
-  }
-
-  return ret;
-};
-
-vi Str2Int(string &s) {
-  vi ret(s.size());
-  rep(i, 0, s.size()) {
-    ret[i] = (int)s[i] - '0';
-  }
-  return ret;
-};
-
-// xの先頭
-int top(int x) {
-  int ret = 0;
-  while (x) {
-    ret = x;
-    x /= 10;
-  }
-  return ret;
+  return result + 1; // 自身を加えたものを返す
 };
 
 int main() {
-  cout << "baseNumber result" << endl;
-  vector<int> a;
-  a = baseNumber(3, 10, 65);
-  for (int i = 0; i < a.size(); i++) {
-    cout << a[i];
-  }
-  cout << endl;
+  ios::sync_with_stdio(false);
+  cin.tie(0);
 
-  cout << "baseNumber result end." << endl;
-  cout << "----------------------" << endl;
+  // 入力
 
-  cout << "baseNumber result" << endl;
-  vector<vector<int>> b = baseNumbers(14, 3, 5);
-  for (int i = 0; i < 14; i++) {
-    for (int j = 0; j < 5; j++) {
-      cout << b[i][j];
-    }
-    cout << endl;
-  }
+  dfs(0, -1);
 
-  cout << "baseNumbers result end." << endl;
-  cout << "----------------------" << endl;
+  cout << dp[0] << endl;
+
+  return 0;
 };

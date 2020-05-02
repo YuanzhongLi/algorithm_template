@@ -85,4 +85,10 @@ __builtin_popcount(<int>)
 __builtin_popcountll(<long long int>)
 ```
 
+### 6. main内での関数作成
+```
+auto function = [&]() {
+    return ;
+};
+```
 
