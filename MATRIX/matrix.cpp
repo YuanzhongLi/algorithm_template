@@ -206,15 +206,13 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  Matrix mat1 = Matrix(2, 3, 1);
-  Matrix mat2 = Matrix(3, 3, 2);
-  mat1 *= mat2;
-  mat1 *= 2;
-  mat1.show();
-  auto mat4 = Matrix(2, 2, 1);
-  mat4.mat[1][1] = 0;
-  auto mat5 = POWMAT(mat4, 10);
-  mat5.show();
+  Matrix mat = Matrix(10, 10, 0);
+  rep(i, 0, 10) {
+    mat.mat[i][i] = 2;
+    if (i > 0) mat.mat[i][i-1] = 1;
+  }
+
+  POWMAT(mat, 10).show();
 
   return 0;
 };
