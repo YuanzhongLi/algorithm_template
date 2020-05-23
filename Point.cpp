@@ -36,6 +36,11 @@ class Point {
   }
 };
 
+std::ostream &operator<<(std::ostream &out, const Point &p) {
+  out << p.x << " " << p.y;
+  return out;
+}
+
 class Circle {
   public:
     Point c;

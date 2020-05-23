@@ -68,14 +68,13 @@ inline bool chmin(T &a, T b) {
 
 // 1-indexed
 class BIT {
-  private:
-    vi bit;
-    int n;
-  public:
-    BIT(int size) {
-      n = size;
-      bit.resize(n+1);
-    }
+public:
+  vi bit;
+  int n;
+  BIT(int size) {
+    n = size;
+    bit.resize(n+1);
+  }
   // 一点更新
   void add(int a, int w) {
     for (int x = a; x <= n; x += x&-x) bit[x] += w;
