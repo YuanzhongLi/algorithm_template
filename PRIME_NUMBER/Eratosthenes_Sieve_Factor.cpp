@@ -201,9 +201,11 @@ std::istream &operator>>(std::istream &in, modint<MOD> &m) {
 const ll MAX = 1e6+5;
 
 // エラトステネスの篩
-struct Sieve {
+class Sieve {
+public:
   ll n;
   vl f, primes;
+  Sieve() {}
   Sieve(ll n = 1): n(n), f(n+1) {
     f[0] = f[1] = -1ll;
     for (ll i = 2; i <= n; i++) {
@@ -218,14 +220,32 @@ struct Sieve {
 
   bool isPrime(int x) { return f[x] == x; }
 
-  // 素因数分解
+  // 素因数分解 (x > MAXの時MAX*MAXまで求められるO(1~MAXまでの素数の数))
   vl factorList(ll x) {
-    vl res;
-    while (x != 1ll) {
-      res.pb(f[x]);
-      x /= f[x];
+    if (x > MAX) {
+      vl res;
+      int idx = 0;
+      while (x > 1) {
+        ll p = primes[idx];
+        if (x % p == 0) {
+          x /= p;
+          res.pb(p);
+        } else {
+          idx++;
+        }
+        if (idx >= (int)primes.size()) break;
+      }
+
+      if (x > 1) res.pb(x);
+      return res;
+    } else {
+      vl res;
+      while (x != 1ll) {
+        res.pb(f[x]);
+        x /= f[x];
+      }
+      return res;
     }
-    return res;
   }
 
   vpl factor(ll x) {

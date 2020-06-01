@@ -35,7 +35,7 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-vector<int> divisor(int n) {
+vector<int> Divisor(int n) {
   vector<int> ret;
   for(int i = 1; i * i <= n; i++) {
     if(n % i == 0) {
@@ -43,12 +43,12 @@ vector<int> divisor(int n) {
       if(i * i != n) ret.push_back(n / i);
     }
   }
-  // sort(All(ret));
+  sort(All(ret));
   return (ret);
 };
 
 int main() {
-  vector<int> a = divisor(100);
+  vector<int> a = Divisor(100);
   for (int tmp: a) {
     cout << tmp << endl;
   }

@@ -66,6 +66,7 @@ inline bool chmin(T &a, T b) {
 
 // AOJ DSL_2_B
 
+// 0-indexed;
 template<class I, class BiOp>
 class SegTree {
   int n;
@@ -90,14 +91,12 @@ public:
       dat[k] = op(dat[2 * k + 1], dat[2 * k + 2]);
     }
   }
-  void update_array(int k, int len, const I *vals) {
-    for (int i = 0; i < len; ++i) {
+  void update_array(const vector<I> vals, int k=0) {
+    for (int i = 0; i < vals.size(); ++i) {
       update(k + i, vals[i]);
     }
   }
-  /*
-    Updates all elements. O(n)
-   */
+  // Updates all elements. O(n)
   void update_all(const I *vals, int len) {
     for (int k = 0; k < std::min(n, len); ++k) {
       dat[k + n - 1] = vals[k];
@@ -111,26 +110,39 @@ public:
       }
     }
   }
-  /* l,r are for simplicity */
+  // l,r are for simplicity
   I querySub(int a, int b, int k, int l, int r) const {
-    // [a,b) and  [l,r) intersects?
+    if (a >= b) return e; // 場合による
     if (r <= a || b <= l) return e;
     if (a <= l && r <= b) return dat[k];
     I vl = querySub(a, b, 2 * k + 1, l, (l + r) / 2);
     I vr = querySub(a, b, 2 * k + 2, (l + r) / 2, r);
     return op(vl, vr);
   }
-  /* [a, b] (note: inclusive) */
+  // [a, b)
   I query(int a, int b) const {
-    return querySub(a, b + 1, 0, 0, n);
+    return querySub(a, b, 0, 0, n);
   }
 };
 
-struct add {
+struct ADD {
   int operator() (int a, int b) const {
     return a + b;
   }
 };
+
+struct MAX {
+  int operator() (int a, int b) const {
+    return max(a, b);
+  }
+};
+
+struct MIN {
+  int operator() (int a, int b) const {
+    return min(a, b);
+  }
+};
+
 
 int main() {
   ios::sync_with_stdio(false);
@@ -145,7 +157,7 @@ int main() {
     }
   }
 
-  SegTree<int, add> ST(n + 1, add(), 0);
+  SegTree<int, ADD> ST(n + 1, ADD(), 0);
 
   rep(i, 0, q) {
     int com = f[i][0];

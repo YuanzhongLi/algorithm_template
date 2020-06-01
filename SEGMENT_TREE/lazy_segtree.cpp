@@ -95,12 +95,12 @@ public:
       // 子ノードは親ノードの半分を伝播させる
       if (r - l > 1) {
         dat[2*k+1].lazy += dat[k].lazy / 2ll;
-        dat[2*k+2].lazy += dat[k].lazy / 2l;
+        dat[2*k+2].lazy += dat[k].lazy / 2ll;
       }
       dat[k].lazy = 0ll;
     }
   }
-  // [l, r)を更新
+  // [a, b)を更新
   void update(int a, int b, ll x, int k = 0, int l = 0, int r = -1) {
     if (r < 0) r = n;
 
