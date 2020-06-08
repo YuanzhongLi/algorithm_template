@@ -4,7 +4,7 @@ using namespace std;
 class Unionfind {
 public:
   int N;
-  vector<int> par; // 節点
+  vector<int> par; // parent
   vector<int> rank; // 木の高さ
   vector<int> size; // 節点が属する木の節点数
   int treeNum; // 木の数
@@ -15,10 +15,11 @@ public:
     treeNum = N;
   }
   // 節点(木)追加
-  void addNode(int x) {
-    par[x] = x;
-    rank[x] = 0;
-    size[x] = 1;
+  void addNode() {
+    par.push_back(N);
+    rank.push_back(0);
+    size.push_back(1);
+    N++;
     treeNum++;
   }
   // 根を探すと同時に経路上にある節点の親が根になるように代入
