@@ -49,22 +49,17 @@ public:
     }
   }
 
-  vector<vector<int>> group() { // 二重ループだが実はO(N)
-    vector<vector<int>> res; // 実はresの全体のサイズはN
-    vector<bool> fixed(N, false);
+  vector<vector<int>> group() { // O(N)
+    vector<vector<int>> res;
+    vector<vector<int>> table(N);
     for (int i = 0; i < N; i++) {
-      if (!fixed[i]) {
-        vector<int> tmp;
-        for (int j = i; j < N; j++) {
-          if (same(i, j)) {
-            tmp.push_back(j);
-            fixed[j] = true;
-          }
-        }
-        res.push_back(tmp);
+      table[root(i)].push_back(i);
+    }
+    for (int i = 0; i < N; i++) {
+      if (!table[i].empty()) {
+        res.push_back(table[i]);
       }
     }
-
     return res;
   }
 };
