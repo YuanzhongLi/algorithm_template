@@ -92,3 +92,17 @@ auto function = [&]() {
 };
 ```
 
+### 7. multisetでのerase
+```
+multiset<int> S;
+S.insert(1); S.insert(1);
+S.erase(1); // 1の要素を全削除
+S.size(); // 0
+
+// 1要素のみ削除するには
+multiset<int> S;
+S.insert(1); S.insert(1);
+S.erase(S.find(1));
+S.size(); // 1
+```
+
