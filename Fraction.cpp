@@ -119,18 +119,18 @@ public:
     long long g2 = __gcd(denominator, f.denominator);
     return sign*(numerator/g1)*(f.denominator/g2) <= f.sign*(f.numerator/g1)*(denominator/g2);
   }
-};
 
-std::ostream &operator<<(std::ostream &out, const Fraction &f) {
-  if (f.sign == 0ll) {
-    out << 0;
-    return out;
-  } else if (f.sign == 1ll) {
-    out << f.numerator << "/" << f.denominator;
-    return out;
-  } else {
-    out << "-" << f.numerator << "/" << f.denominator;
-    return out;
+  friend ostream &operator<<(std::ostream &out, const Fraction &f) {
+    if (f.sign == 0ll) {
+      out << 0;
+      return out;
+    } else if (f.sign == 1ll) {
+      out << f.numerator << "/" << f.denominator;
+      return out;
+    } else {
+      out << "-" << f.numerator << "/" << f.denominator;
+      return out;
+    }
   }
 };
 
