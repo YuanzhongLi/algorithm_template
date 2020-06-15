@@ -65,11 +65,12 @@ inline bool chmin(T &a, T b) {
 };
 
 // AOJ DPL_2_A
+// url: https://onlinejudge.u-aizu.ac.jp/courses/library/7/DPL/2/DPL_2_A
 
 const int MAX_N = 15;
 const int INF = 1e9+7;
 vvi dist(MAX_N, vi(MAX_N, INF));
-vvi dp(1 << MAX_N, vi (MAX_N, INF));
+vvi dp(1 << MAX_N, vi (MAX_N, INF)); // dp[<すでに到達した場所のbit>][現在いる場所]
 
 int main() {
   ios::sync_with_stdio(false);
