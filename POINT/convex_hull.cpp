@@ -1,15 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define rep(i,s,n) for (int i = (int)s; i < (int)n; i++)
-#define ll long long
-#define pb push_back
-#define All(x) x.begin(), x.end()
-#define Range(x, i, j) x.begin() + i, x.begin() + j
-#define lbidx(x, y) lower_bound(x.begin(), x.end(), y) - x.begin()
-#define ubidx(x, y) upper_bound(x.begin(), x.end(), y) - x.begin()
-#define BiSearchRangeNum(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y);
-
 #define EPS (1e-10)
 #define equals(a, b) (fabs((a) - (b)) < EPS)
 
@@ -185,23 +176,11 @@ pair<Point, Point> getCrossPoints(Circle c1, Circle c2) {
 };
 
 typedef vector<Point> Polygon;
-// 点の内包
-int contains(Polygon g, Point p) {
-  int n = g.size();
-  bool x = false;
-  for (int i = 0; i < n; i++) {
-    Point a = g[i] - p, b = g[(i + 1) % n] - p;
-    // 辺上のとき1を返す
-    if (abs(cross(a, b)) < EPS && dot(a, b) < EPS) return 1;
-    if (a.y > b.y) swap(a, b);
-    if (a.y < EPS && EPS < b.y && cross(a, b) > EPS) x = !x;
-  }
 
-  return (x ? 2 : 0);
-};
-
-// 凸包
-Polygon andrewScan(Polygon s) {
+/* 凸包
+  andrew algorithm O(NlogN); sort part O(NlogN), andrew part O(N)
+*/
+Polygon convex_hull(Polygon s) {
   Polygon u, l;
   if (s.size() < 3) return s;
   sort(s.begin(), s.end());
@@ -245,7 +224,7 @@ int main() {
     s.push_back(p);
   }
 
-  Polygon ans = andrewScan(s);
+  Polygon ans = convex_hull(s);
 
   int min_y_idx = 0;
   double min_y = ans[0].y;
@@ -267,7 +246,6 @@ int main() {
       idx++;
     }
   }
-
 
   return 0;
 };
