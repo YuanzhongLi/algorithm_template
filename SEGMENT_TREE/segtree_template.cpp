@@ -112,7 +112,7 @@ public:
   }
   // l,r are for simplicity
   I querySub(int a, int b, int k, int l, int r) const {
-    if (a >= b) return e; // 場合による
+    if (a >= b) return e; // case by case
     if (r <= a || b <= l) return e;
     if (a <= l && r <= b) return dat[k];
     I vl = querySub(a, b, 2 * k + 1, l, (l + r) / 2);
@@ -125,6 +125,7 @@ public:
   }
 };
 
+// Note: if long long not forget to change!
 struct ADD {
   int operator() (int a, int b) const {
     return a + b;
@@ -169,7 +170,6 @@ int main() {
       cout << ST.query(x, y) << endl;
     }
   }
-
 
   return 0;
 };
