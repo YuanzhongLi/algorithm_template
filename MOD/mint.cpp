@@ -1,55 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define rep(i,s,n) for (int i = (int)s; i < (int)n; i++)
-#define ll long long
-#define pb push_back
-#define eb emplace_back
-#define All(x) x.begin(), x.end()
-#define Range(x, i, j) x.begin() + i, x.begin() + j
-#define lbidx(x, y) lower_bound(x.begin(), x.end(), y) - x.begin()
-#define ubidx(x, y) upper_bound(x.begin(), x.end(), y) - x.begin()
-#define llbidx(x, y, z) lower_bound(x.begin(), x.end(), z) - lower_bound(x.begin(), x.end(), y) // 二要素間の距離
-#define deg2rad(deg) ((((double)deg)/((double)360)*2*M_PI))
-#define rad2deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
-#define Find(set, element) set.find(element) != set.end()
-#define Decimal(x) printf("%.10f\n", x) // 小数点を10桁まで表示
-// debug用
-#define PrintVec(x) for (auto elementPrintVec: x) { cout << elementPrintVec << " "; } cout << endl;
-
-typedef pair<int, int> PI;
-typedef pair<ll, ll> PLL;
-
-int POWINT(int x, int n) {
-  int ret = 1;
-  rep(i, 0, n) ret *= x;
-  return ret;
-};
-
-ll POWLL(int x, int n) {
-  ll ret = 1;
-  rep(i, 0, n) ret *= x;
-  return ret;
-};
-
-template<class T>
-inline bool chmax(T &a, T b) {
-  if(a < b) {
-    a = b;
-    return true;
-  }
-  return false;
-};
-
-template<class T>
-inline bool chmin(T &a, T b) {
-  if(a > b) {
-    a = b;
-    return true;
-  }
-  return false;
-};
-
 template<std::int_fast64_t Modulus>
 class modint {
   using i64 = int_fast64_t;
@@ -107,7 +58,6 @@ class modint {
     return *this;
   }
 
-  // 自前実装
   constexpr bool operator==(const modint rhs) noexcept {
     return a == rhs.a;
   }
@@ -158,30 +108,26 @@ class modint {
   }
 };
 
-const ll MOD = 1e9+7;
+const long long MOD = 1e9+7;
 using mint = modint<MOD>;
-// 標準入出力対応
+// iostream
 std::ostream &operator<<(std::ostream &out, const modint<MOD> &m) {
-  out << m.a;
-  return out;
-}
+  out << m.a; return out;
+};
 std::istream &operator>>(std::istream &in, modint<MOD> &m) {
-  ll a;
-  in >> a;
-  m = mint(a);
-  return in;
-}
+  long long a; in >> a; m = mint(a); return in;
+};
 
 mint fact[200005];
 
 void init() {
   fact[0] = mint(1);
   for(int i = 1; i < 200005; i++) {
-    fact[i] = fact[i - 1] * mint(i);
+    fact[i] = fact[i-1] * mint(i);
   }
 };
 
-// nCr mod を計算する
+// calculate nCr mod
 mint modcomb(long long n, long long r) {
   return fact[n] / fact[r] / fact[n - r];
 };
