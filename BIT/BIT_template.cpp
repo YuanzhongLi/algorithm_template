@@ -66,49 +66,65 @@ inline bool chmin(T &a, T b) {
 
 // 解説url: https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
 
-// 1-indexed
+// 0-indexed
+template<typename T>
 class BIT {
 public:
-  vi bit;
   int n;
-  BIT(int size) {
-    n = size;
-    bit.resize(n+1);
-  }
-  // 一点更新
-  void add(int a, int w) {
-    for (int x = a; x <= n; x += x&-x) bit[x] += w;
+  vector<T> dat;
+
+  BIT(int n=0) {
+    init(n);
   }
 
-  // 1~aまでの和を求める
-  int sum(int a) {
-    int ret = 0;
-    for (int x = a; x > 0; x -= x&-x) ret += bit[x];
-    return ret;
+  void init(int nin) {
+    n = nin;
+    dat.resize(n);
+    for (int i = 0; i < n; i++) dat[i] = 0;
+  }
+
+  // 0~iまでの和を求める
+  T sum(int i) {
+    T s = 0;
+    while (i >= 0) {
+      s += dat[i];
+      i = (i & (i+1)) - 1;
+    }
+    return s;
+  }
+
+  // [i, j]の和を求める
+  T sum_between(int i, int j){
+    if(i > j) return 0;
+    return sum(j) - sum(i-1);
+  }
+
+  // 一点更新
+  void add(int i, T x) {
+    while(i < n) {
+      dat[i] += x;
+      i |= i+1;
+    }
+  }
+
+  // a[0]+...+a[ret] >= x
+  int lower_bound(T x){
+    int ret = -1;
+    int k = 1;
+    while (2*k <= n) k <<= 1;
+    for( ;k>0; k>>=1){
+      if(ret+k < n && dat[ret+k] < x){
+        x -= dat[ret+k];
+        ret += k;
+      }
+    }
+    return ret + 1;
   }
 };
-
-// Chokudai SpeedRun 001 J
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-
-  int n;
-  cin >> n;
-  vi v(n);
-  rep(i, 0, n) {
-    cin >> v[i];
-  }
-
-  ll ans = 0;
-  BIT bit(n);
-  rep(i, 0, n) {
-    ans += i - bit.sum(v[i]);
-    bit.add(v[i], 1);
-  }
-
-  cout << ans << endl;
 
   return 0;
 };
