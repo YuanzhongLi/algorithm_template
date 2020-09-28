@@ -76,7 +76,7 @@ inline bool chmin(T &a, T b) {
 };
 
 class Dijkstra {
-  ll INF = (1ll << 58);
+  ll INF = 1001002003004005006ll;
   int WHITE = 0; // 未到達
   int GRAY = 1; // 到達
   int BLACK = 2; // 探索済み

@@ -121,7 +121,6 @@ int main() {
   int N;
   ll K;
   cin >> N >> K;
-  vi a(N);
   rep(i, 0, N) {
     cin >> to[0][i];
     to[0][i]--;
