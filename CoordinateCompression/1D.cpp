@@ -128,11 +128,23 @@ int compress(int n, vi &X, int w) {
 
   sort(All(xs));
   xs.erase(unique(All(xs)), xs.end());
+  int ret = xs.size();
+
   rep(i, 0, n) {
-    X[i] = lbidx(xs, X[i]);
+    int xi = X[i];
+    int ok = 0, ng = ret;
+    while (abs(ok-ng) > 1) {
+      int mid = (ok+ng)/2;
+      if (xs[mid] >= xi) {
+        ok = mid;
+      } else {
+        ng = mid;
+      }
+    }
+    X[i] = ok;
   }
 
-  return xs.size();
+  return ret;
 };
 
 int main() {
