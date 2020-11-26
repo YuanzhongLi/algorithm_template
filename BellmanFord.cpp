@@ -13,33 +13,21 @@ using namespace std;
 #define rad_to_deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
 
 template<class T>
-inline bool chmax(T &a, T b) {
-    if(a < b) {
-        a = b;
-        return true;
-    }
-    return false;
-};
-
+inline bool chmax(T &a, T b) { if(a<b) { a=b; return true; } return false; };
 template<class T>
-inline bool chmin(T &a, T b) {
-    if(a > b) {
-        a = b;
-        return true;
-    }
-    return false;
-};
+inline bool chmin(T &a, T b) { if(a>b) { a=b; return true; } return false; };
+
+
+// VERIFICATIOIN: ABC 137_E
+// URL: https://atcoder.jp/contests/abc137/submissions/18412024
 
 // 単一始点全点間最短路を求めるアルゴリズム。単一始点全点間最短路を求めるアルゴリズム。負辺があっても動作する。また負閉路も検出する。
-
 // 計算量 O(V * E)
 
-static const int INF = 1e9;
+constexpr int INF = 1002003004;
 
 struct Edge {
-  int from;
-  int to;
-  int cost;
+  int from, to, cost;
 };
 
 vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
@@ -57,7 +45,7 @@ vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
   rep(i, 0, edges.size()) {
     struct Edge e = edges[i];
     if (dist[e.from] == INF) continue;
-    // 負回路発見
+    // detect negative roop
     if (dist[e.from] + e.cost < dist[e.to]) {
       flag = false;
       break;
@@ -67,34 +55,7 @@ vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
   if (flag) {
     return dist;
   } else {
-    vector<int> neg;
+    vector<int> neg; // return empty vector<int>
     return neg;
-  }
-};
-
-
-int main() {
-  int V, E, r;
-  cin >> V >> E >> r;
-  vector<Edge> edges(E);
-  int s, t, d;
-  rep(i, 0, E) {
-    cin >> s >> t >> d;
-    edges[i] = { s, t, d };
-  }
-
-  vector<int> dist = bellman_ford(r, V, edges);
-  if (dist.empty()) {
-    cout << "NEGATIVE CYCLE" << endl;
-    return 0;
-  } else {
-    rep(i, 0, dist.size()) {
-      if (dist[i] == INF) {
-        printf("INF\n");
-      } else {
-        printf("%d\n", dist[i]);
-      }
-    }
-    return 0;
   }
 };
