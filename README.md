@@ -106,3 +106,10 @@ S.erase(S.find(1));
 S.size(); // 1
 ```
 
+### 8. 掛け算のoverflow判定
+```
+long long a, b, INF;
+if ((long double)a * (long double)b < INF) {
+
+}
+```
