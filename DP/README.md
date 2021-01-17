@@ -1,3 +1,6 @@
+### get_largest_rect
+![](./img/get_largest_rect_001.png)
+
 ### 復習
 #### abc130E
 数え上げのときの注意
