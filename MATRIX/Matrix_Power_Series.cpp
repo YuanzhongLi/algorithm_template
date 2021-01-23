@@ -77,147 +77,100 @@ inline bool chmin(T &a, T b) {
 
 class Matrix {
   public:
-  int r, c;
-  vvl mat;
+  long long r, c;
+  vector<vector<long long>> mat;
   Matrix() {}
-  Matrix(int r, int c, int init=0ll): r(r), c(c) {
+  Matrix(int r, int c, long long init=0): r(r), c(c) {
     mat.resize(r);
-    rep(i, 0, r) {
-      mat[i].resize(c);
-    }
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] = init;
-      }
-    }
+    for (int i=0; i<r; i++) mat[i].resize(c);
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] = init;
   }
   void show() {
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        cout << mat[i][j];
-        if (j < c-1) {
-          cout << " ";
-        }
+    for (int i=0; i<r; i++) {
+      for (int j=0; j<c; j++) {
+        cout << mat[i][j]; if (j < c-1) cout << " ";
       }
       cout << endl;
     }
   }
   Matrix operator-() const {
     Matrix ret = Matrix(r, c);
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        ret.mat[i][j] *= -1ll;
-      }
-    }
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) ret.mat[i][j] *= -1ll;
     return ret;
   }
   Matrix& operator+=(const Matrix a) {
     assert(r == a.r && c == a.c);
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] += a.mat[i][j];
-      }
-    }
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] += a.mat[i][j];
     return *this;
   }
-  Matrix& operator+=(const ll n) {
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] += n;
-      }
-    }
+  Matrix& operator+=(const int n) {
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] += n;
     return *this;
   }
   Matrix& operator-=(const Matrix a) {
     assert(r == a.r && c == a.c);
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] -= a.mat[i][j];
-      }
-    }
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] -= a.mat[i][j];
     return *this;
   }
-  Matrix& operator-=(const ll n) {
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] -= n;
-      }
-    }
+  Matrix& operator-=(const long long n) {
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] -= n;
     return *this;
   }
   Matrix& operator*=(const Matrix a) {
     assert(c == a.r);
     Matrix ret = Matrix(r, a.c);
-    rep(i, 0, r) {
-      rep(k, 0, c) {
-        rep(j, 0, a.c) {
-          ret.mat[i][j] += (mat[i][k] * a.mat[k][j]);
-        }
-      }
-    }
+    for (int i=0; i<r; i++) for (int k=0; k<c; k++) for (int j=0; j<a.c; j++) ret.mat[i][j] += (mat[i][k] * a.mat[k][j]);
     *this = ret;
     return *this;
   }
-  Matrix& operator*=(const ll n) {
-    rep(i, 0, r) {
-      rep(j, 0, c) {
-        mat[i][j] *= n;
-      }
-    }
+  Matrix& operator*=(const long long n) {
+    for (int i=0; i<r; i++) for (int j=0; j<c; j++) mat[i][j] *= n;
     return *this;
   }
   Matrix operator+(const Matrix a) const {
     assert(r == a.r && c == a.c);
     return Matrix(*this) += a;
   }
-  Matrix operator+(const ll n) const {
+  Matrix operator+(const long long n) const {
     return Matrix(*this) += n;
   }
   Matrix operator-(const Matrix a) const {
     assert(r == a.r && c == a.c);
     return Matrix(*this) -= a;
   }
-  Matrix operator-(const ll n) const {
+  Matrix operator-(const long long n) const {
     return Matrix(*this) -= n;
   }
   Matrix operator*(const Matrix a) const {
     return Matrix(*this) *= a;
   }
-  Matrix operator*(const ll n) const {
+  Matrix operator*(const long long n) const {
     return Matrix(*this) *= n;
   }
 };
 
-Matrix POWMAT(Matrix a, ll n) {
+Matrix POWMAT(Matrix a, long long n) {
   assert(a.r == a.c);
   Matrix ret = Matrix(a.r, a.r);
-  rep(i, 0, a.r) {
-    ret.mat[i][i] = 1ll;
-  }
+  for (int i=0; i<a.r; i++) ret.mat[i][i] = 1ll;
   while (n > 0) {
     if (n & 1ll) ret *= a;
-    a *= a;
-    n >>= 1;
+    a *= a; n >>= 1;
   }
   return ret;
 };
 
 // A + A^2 + ... + A^k
-Matrix POWMAT_SERIES(Matrix a, ll k) {
+Matrix POWMAT_SERIES(Matrix a, long long k) {
   assert(a.r == a.c);
   Matrix B = Matrix(a.r * 2, a.r * 2);
-  rep(i, 0, a.r) {
-    rep(j, 0, a.r) {
-      B.mat[i][j] = a.mat[i][j];
-    }
+  for (int i=0; i<a.r; i++) {
+    for (int j=0; j<a.r; j++) B.mat[i][j] = a.mat[i][j];
     B.mat[a.r+i][i] = B.mat[a.r+i][a.r+i] = 1ll;
   }
-  B = POWMAT(B, k+1ll);
-  Matrix ret = Matrix(a.r, a.r);
-  rep(i, 0, ret.r) {
-    rep(j, 0, ret.r) {
-      ret.mat[i][j] = B.mat[ret.r+i][j];
-    }
+  B = POWMAT(B, k+1ll); Matrix ret = Matrix(a.r, a.r);
+  for (int i=0; i<ret.r; i++) {
+    for (int j=0; j<ret.r; j++) ret.mat[i][j] = B.mat[ret.r+i][j];
     ret.mat[i][i]--;
   }
   return ret;

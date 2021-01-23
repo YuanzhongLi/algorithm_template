@@ -51,7 +51,7 @@ inline bool chmin(T &a, T b) {
 };
 
 vector<int> manacher_for_odd(const string &s) {
-  vector< int > radius(s.size());
+  vector<int> radius(s.size());
   int i = 0, j = 0;
   while(i < s.size()) {
     while(i - j >= 0 && i + j < s.size() && s[i - j] == s[i + j]) {
@@ -71,7 +71,7 @@ vector<int> manacher_for_odd(const string &s) {
 
 vector<int> manacher_for_even(const string &s) {
   string tmp;
-  rep(i, 0, s.size()) {
+  for (int i = 0; i < (int)s.size(); i++) {
     char ch = s[i];
     tmp += ch;
     if (i < (int)s.size() - 1) {
@@ -89,7 +89,7 @@ vector<int> manacher(const string &s) {
   vector<int> manacher_odd = manacher_for_odd(s);
   vector<int> manacher_even = manacher_for_even(s);
   vector<int> manacher_vec = vector<int> ((int)manacher_even.size());
-  rep(i, 0, manacher_vec.size()) {
+  for (int i = 0; i < (int)manacher_vec.size(); i++) {
     if (i % 2 == 0) {
       manacher_vec[i] = manacher_odd[i/2];
     } else {
