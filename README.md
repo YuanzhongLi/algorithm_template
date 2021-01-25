@@ -104,6 +104,10 @@ multiset<int> S;
 S.insert(1); S.insert(1);
 S.erase(S.find(1));
 S.size(); // 1
+
+// 最大, 最小のitrを取得
+it = S.begin(); // 最小
+it = S.rbegin(); // 最大
 ```
 
 ### 8. 掛け算のoverflow判定
