@@ -30,46 +30,40 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
+
+
 #define MAX 1400
 
-struct Rect { int height; int pos; };
+// VERIFICATIOIN: ABC 189_C
+// URL: https://atcoder.jp/contests/abc189/submissions/19654680
 
-// ヒストグラムから最大長方形面積を取得
-int getLargestRect(int size, int buffer[]) {
-  stack<Rect> S;
-  int maxv = 0;
-  buffer[size] = 0;
+// from histogram get max rectangular area
+ll getLargestRect(vector<long long> A) {
+  vector<pair<long long, long long>> stack;
+  A.push_back(0ll); // add sentinel
+  ll n = A.size();
+  ll maxv = 0;
 
-  rep(i, 0, size+1) {
-    Rect rect;
-    rect.height = buffer[i];
-    rect.pos = i;
-    if (S.empty()) {
-      S.push(rect);
-    } else {
-      if (S.top().height < rect.height) {
-        S.push(rect);
-      } else if (S.top().height > rect.height) {
-        int target = i;
-        while (!S.empty() && S.top().height >= rect.height) {
-          Rect pre = S.top(); S.pop();
-          int area = pre.height * (i - pre.pos);
-          maxv = max(maxv, area);
-          target = pre.pos;
+  for (int i=0; i<n+1; i++) {
+    ll a = A[i];
+    if (stack.empty()) stack.push_back(make_pair(a, i));
+    else {
+      if (stack.back().first < a) stack.push_back(make_pair(a, i));
+      else if (stack.back().first > a) {
+        ll target = i;
+        while (!stack.empty() && stack.back().first >= a) {
+          auto  pre = stack.back(); stack.pop_back();
+          ll tmp = pre.first * (i - pre.second); maxv = max<ll>(maxv, tmp); target = pre.second;
         }
-
-        rect.pos = target;
-        S.push(rect);
+        stack.push_back(make_pair(a, target));
       }
     }
   }
-
   return maxv;
 };
 
 int H, W;
-int buffer[MAX][MAX];
-int T[MAX][MAX];
+vector<vector<long long>> buffer(MAX, vector<long long> (MAX, 0ll)), T(MAX, vector<long long> (MAX, 0ll));
 
 int solve() {
   rep(j, 0, W) {
@@ -82,10 +76,10 @@ int solve() {
     }
   }
 
-  int ret = 0;
+  ll ret = 0;
 
   rep(i, 0, H) {
-    ret = max(ret, getLargestRect(W, T[i]));
+    ret = max<ll>(ret, getLargestRect(T[i]));
   }
 
   return ret;
