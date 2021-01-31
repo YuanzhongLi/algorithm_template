@@ -84,9 +84,7 @@ int main() {
     dist[s][t] = d;
   }
 
-  // どの点から初めても同じ
-  dp[(1 << V) - 1][0] = 0;
-
+  for (int i=0; i<V; i++) dp[(1<<V)-1][i] = 0;
   for (int S = (1 << V) - 2; S >= 0; S--) {
     rep(v, 0, V) {
       rep(u, 0, V) {

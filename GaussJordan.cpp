@@ -48,71 +48,35 @@ inline bool chmin(T &a, T b) { if(a>b) { a=b; return true; } return false; };
 template<class T, class U>
 T POW(T x, U n) {T ret=1; while (n>0) {if (n&1) {ret*=x;} x*=x; n>>=1;} return ret;};
 
-// debug
-template <typename A, typename B>
-string to_string(pair<A, B> p);
-string to_string(const string &s) {return '"' + s + '"';};
-string to_string(const char c) {return to_string((string) &c);};
-string to_string(bool b) {return (b ? "true" : "false");};
-template <size_t N>
-string to_string(bitset<N> v){
-  string res = "";
-  for(size_t i = 0; i < N; i++) res += static_cast<char>('0' + v[i]);
-  return res;
-};
-template <typename A>
-string to_string(A v) {
-  bool first = true;
-  string res = "{";
-  for(const auto &x : v) {
-    if(!first) res += ", ";
-    first = false; res += to_string(x);
+const long double eps = 1e-10;
+// solve Ax = b, A shoulde be square matrix
+// if no solution or solution is not unique, return size 0 vector
+vector<long double> gauss_jordan(vector<vector<long double>> A, vector<long double> b) {
+  int n = A.size();
+  vector<vector<long double>> B(n, vector<long double> (n+1)); // B = [A, b]
+  for (int i=0; i<n; i++) for (int j=0; j<n; j++) B[i][j] = A[i][j];
+  for (int i=0; i<n; i++) B[i][n] = b[i];
+
+  for (int i=0; i<n; i++) {
+    // put the largest |coefficient| to the current place:i (this is for smaller error)
+    int pivot = i;
+    for (int j=0; j<n; j++) if (abs(B[j][i]) > abs(B[pivot][i])) pivot = j;
+    swap(B[i], B[pivot]);
+
+    if (abs(B[i][i]) < eps) return vector<long double>();
+
+    for (int j=i+1; j<=n; j++) B[i][j] /= B[i][i];
+    for (int j=0; j<n; j++) {
+      if (i != j) {
+        for (int k=i+1; k<=n; k++) B[j][k] -= B[j][i]*B[i][k];
+      }
+    }
   }
-  res += "}";
-  return res;
-};
-template <typename A, typename B>
-string to_string(pair<A, B> p){return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";}
-
-void debug_out() {cerr << endl;};
-template<typename Head, typename... Tail>
-void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); };
-
-void LINE_OUT() {
-  cout << "--------------" << endl;
+  vector<long double> x(n);
+  for (int i=0; i<n; i++) x[i] = B[i][n];
+  return x;
 };
 
-#ifdef LOCAL
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
-#define LINE LINE_OUT();
-#else
-#define debug(...) 71
-#define LINE 71;
-#endif
-
-void print() { cout << endl; }
-template <class Head, class... Tail>
-void print(Head&& head, Tail&&... tail) {
-  cout << head;
-  if (sizeof...(tail) != 0) cout << " ";
-  print(forward<Tail>(tail)...);
-};
-
-template <class T>
-void print(vector<T> &vec) {
-  for (auto& a : vec) {
-    cout << a;
-    if (&a != &vec.back()) cout << " ";
-  }
-  cout << endl;
-};
-
-template <class T>
-void print(vector<vector<T>> &df) {
-  for (auto& vec : df) {
-    print(vec);
-  }
-};
 
 int main() {
   ios::sync_with_stdio(false);
