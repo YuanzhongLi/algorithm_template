@@ -64,8 +64,6 @@ inline bool chmin(T &a, T b) {
   return false;
 };
 
-// 解説url: https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
-
 // 0-indexed
 template<typename T>
 class BIT {
