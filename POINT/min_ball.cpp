@@ -1,5 +1,119 @@
+// #define LOCAL
+#ifdef LOCAL
+#define _GLIBCXX_DEBUG
+#endif
 #include <bits/stdc++.h>
 using namespace std;
+
+#define int long long
+#define rep(i,s,n) for (int i = (ll)s; i < (ll)n; i++)
+#define rrep(i,n,e) for (int i = (ll)n; i > (ll)e; i--)
+#define ll long long
+#define ld long double
+#define pb push_back
+#define eb emplace_back
+#define All(x) x.begin(), x.end()
+#define Range(x, i, j) x.begin() + i, x.begin() + j
+// #define M_PI 3.14159265358979323846 // CF
+#define deg2rad(deg) ((((double)deg)/((double)360)*2*M_PI))
+#define rad2deg(rad) ((((double)rad)/(double)2/M_PI)*(double)360)
+#define Find(set, element) set.find(element) != set.end()
+#define Decimal(x) cout << fixed << setprecision(10) << x << endl; // print Decimal number 10 Rank
+#define endl "\n"
+#define Case(x) printf("Case #%d: ", x); // gcj
+
+typedef pair<int, int> PI;
+typedef pair<ll, ll> PLL;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<vector<int>>> vvvi;
+typedef vector<ll> vl;
+typedef vector<vector<ll>> vvl;
+typedef vector<vector<vector<ll>>> vvvl;
+typedef vector<PI> vpi;
+typedef vector<vector<PI>> vvpi;
+typedef vector<PLL> vpl;
+typedef vector<vector<PLL>> vvpl;
+typedef vector<char> vch;
+typedef vector<vector<char>> vvch;
+
+constexpr ll LINF = 1001002003004005006ll;
+constexpr int INF = 1002003004;
+constexpr int n_max = 2e5+10;
+
+template<class T>
+inline bool chmax(T &a, T b) { if(a<b) { a=b; return true; } return false; };
+template<class T>
+inline bool chmin(T &a, T b) { if(a>b) { a=b; return true; } return false; };
+
+template<class T, class U>
+T POW(T x, U n) {T ret=1; while (n>0) {if (n&1) {ret*=x;} x*=x; n>>=1;} return ret;};
+
+// debug
+template <typename A, typename B>
+string to_string(pair<A, B> p);
+string to_string(const string &s) {return '"' + s + '"';};
+string to_string(const char c) {return to_string((string) &c);};
+string to_string(bool b) {return (b ? "true" : "false");};
+template <size_t N>
+string to_string(bitset<N> v){
+  string res = "";
+  for(size_t i = 0; i < N; i++) res += static_cast<char>('0' + v[i]);
+  return res;
+};
+template <typename A>
+string to_string(A v) {
+  bool first = true;
+  string res = "{";
+  for(const auto &x : v) {
+    if(!first) res += ", ";
+    first = false; res += to_string(x);
+  }
+  res += "}";
+  return res;
+};
+template <typename A, typename B>
+string to_string(pair<A, B> p){return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";}
+
+void debug_out() {cerr << endl;};
+template<typename Head, typename... Tail>
+void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); };
+
+void LINE_OUT() {
+  cout << "--------------" << endl;
+};
+
+#ifdef LOCAL
+#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+#define LINE LINE_OUT();
+#else
+#define debug(...) 71
+#define LINE 71;
+#endif
+
+void print() { cout << endl; }
+template <class Head, class... Tail>
+void print(Head&& head, Tail&&... tail) {
+  cout << head;
+  if (sizeof...(tail) != 0) cout << " ";
+  print(forward<Tail>(tail)...);
+};
+
+template <class T>
+void print(vector<T> &vec) {
+  for (auto& a : vec) {
+    cout << a;
+    if (&a != &vec.back()) cout << " ";
+  }
+  cout << endl;
+};
+
+template <class T>
+void print(vector<vector<T>> &df) {
+  for (auto& vec : df) {
+    print(vec);
+  }
+};
 
 #define EPS (1e-10)
 #define equals(a, b) (fabs((a) - (b)) < EPS)
@@ -185,70 +299,54 @@ Point gaisin(Point a, Point b, Point c) {
 
 typedef vector<Point> Polygon;
 
-/* 凸包
-  andrew algorithm O(NlogN); sort part O(NlogN), andrew part O(N)
-*/
-Polygon convex_hull(Polygon s) {
-  Polygon u, l;
-  if (s.size() < 3) return s;
-  sort(s.begin(), s.end());
-  // xが小さいものから2つuに追加
-  u.push_back(s[0]);
-  u.push_back(s[1]);
-  // xが大きいものから2つlに追加
-  l.push_back(s[s.size() - 1]);
-  l.push_back(s[s.size() - 2]);
+// VERIFICATIOIN: ABC 151_F
+// URL: https://atcoder.jp/contests/abc151/submissions/19911467
+// O(N^4)
+Circle min_ball(Polygon polygon) {
+  int N = polygon.size();
+  if (N <= 1) {
+    return Circle(); // x: 0, y: 0, r:0
+  } else if (N == 2) {
+    long double dist = getDistance(polygon[0], polygon[1]);
+    long double r = dist/2.0;
+    return Circle((polygon[0]+polygon[1])/2, r);
+  }
 
-  for (int i = 2; i < s.size(); i++) {
-    for (int n = u.size(); n >= 2 && ccw(u[n - 2], u[n - 1], s[i]) == COUNTER_CLOCKWISE; n--) {
-      u.pop_back();
+  Polygon alt;
+  for (int i=0; i<N; i++) {
+    for (int j =i+1; j<N; j++) {
+      alt.push_back((polygon[i]+polygon[j])/2);
+      for (int k = j+1; k < N; k++) {
+        int state = ccw(polygon[i], polygon[j], polygon[k]);
+        if (!(state == CLOCKWISE || state == COUNTER_CLOCKWISE)) continue;
+        Point p = gaisin(polygon[i], polygon[j], polygon[k]);
+        alt.push_back(p);
+      }
     }
-    u.push_back(s[i]);
   }
 
-  for (int i = s.size() - 3; i >= 0; i--) {
-    for (int n = l.size(); n >= 2 && ccw(l[n - 2], l[n - 1], s[i]) == COUNTER_CLOCKWISE; n--) {
-      l.pop_back();
-    }
-    l.push_back(s[i]);
+  const long double LDINF = 1e18;
+  Circle ret(Point(), LDINF);
+  for (Point c: alt) {
+    long double r = 0.0;
+    for (Point p: polygon) chmax(r, getDistance(p, c));
+    if (chmin(ret.r, r)) ret.c = c;
   }
 
-  // 反時計周りになるように凸包の点の列を生成
-  reverse(l.begin(), l.end());
-  for (int i = u.size() - 2; i >= 1; i--) {
-    l.push_back(u[i]);
-  }
-
-  return l;
+  return ret;
 };
 
-// ここでは凸包の最大点対間距離を求めている
-double rotaring_calipers(Polygon &qs) {
-  int n = qs.size();
-  if (n == 2) {
-    return getDistance(qs[0], qs[1]);
-  }
+signed main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
 
-  // x軸方向に最も遠い点対のqsにおけるindexを求める
-  int i = 0, j = 0;
-  for (int k = 0; k < n; k++) {
-    if (qs[k] < qs[i]) i = k;
-    if (qs[j] < qs[k]) j = k;
-  }
-  long double res = 0;
-  int si = i, sj = j;
-  while (i != sj || j != si) { // 方向を180度変化させる
-    res = max(res, getDistance(qs[i], qs[j]));
-    // 辺i-(i+1)の法線方向と辺j-(j+1)の法線方向のどちらをさくに向くか判定
-    if (cross(qs[(i+1)%n]-qs[i], qs[(j+1) % n]-qs[j]) < 0.0) {
-      i = (i+1) % n;
-    } else {
-      j = (j+1) % n;
-    }
-  }
-  return res;
-};
+  int N; cin >> N;
+  Polygon polygon(N);
+  rep(i, 0, N) cin >> polygon[i].x >> polygon[i].y;
 
-int main() {
+  auto ans = min_ball(polygon);
 
+  Decimal(ans.r);
+
+  return 0;
 };

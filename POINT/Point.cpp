@@ -6,17 +6,17 @@ using namespace std;
 
 class Point {
   public:
-  double x, y;
+  long double x, y;
 
-  Point(double x = 0, double y = 0): x(x), y(y) {}
+  Point(long double x = 0, long double y = 0): x(x), y(y) {}
 
   Point operator + (Point p) { return Point(x + p.x, y + p.y); }
   Point operator - (Point p) { return Point(x - p.x, y - p.y); }
-  Point operator * (double a) { return Point(a * x, a * y); }
-  Point operator / (double a) { return Point(x / a, y / a); }
+  Point operator * (long double a) { return Point(a * x, a * y); }
+  Point operator / (long double a) { return Point(x / a, y / a); }
 
-  double abs() { return sqrt(norm()); }
-  double norm() { return x * x + y * y; }
+  long double abs() { return sqrtl(norm()); }
+  long double norm() { return x * x + y * y; }
 
   bool operator < (const Point &p) const {
     return x != p.x ? x < p.x : y < p.y;
@@ -28,15 +28,15 @@ class Point {
 };
 
 std::ostream &operator<<(std::ostream &out, const Point &p) {
-  out << p.x << " " << p.y;
+  out << '(' << p.x << ", " << p.y << ')';
   return out;
 }
 
 class Circle {
   public:
     Point c;
-    double r;
-    Circle(Point c = Point(), double r = 0.0): c(c), r(r) {}
+    long double r;
+    Circle(Point c = Point(), long double r = 0.0): c(c), r(r) {}
 };
 
 struct Segment {
@@ -46,21 +46,21 @@ struct Segment {
 typedef Point Vector;
 typedef Segment Line;
 
-double norm(Vector a) {
+long double norm(Vector a) {
   return a.x * a.x + a.y * a.y;
 };
 
-double abs(Vector a) {
-  return sqrt(norm(a));
+long double abs(Vector a) {
+  return sqrtl(norm(a));
 };
 
 // 内積
-double dot(Vector a, Vector b) {
+long double dot(Vector a, Vector b) {
   return a.x * b.x + a.y * b.y;
 };
 
 // 外積
-double cross(Vector a, Vector b) {
+long double cross(Vector a, Vector b) {
   return a.x * b.y - a.y * b.x;
 };
 
@@ -77,7 +77,7 @@ bool isParallel(Vector a, Vector b) {
 // 射影
 Point project(Segment s, Point p) {
   Vector base = s.p2 - s.p1;
-  double r = dot(p - s.p1, base) / base.norm();
+  long double r = dot(p - s.p1, base) / base.norm();
   return s.p1 + base * r;
 };
 
@@ -86,18 +86,22 @@ Point reflect(Segment s, Point p) {
   return p + (project(s, p) - p) * 2.0;
 };
 
+// 回転 ang: radian
+Point rot(Point p, long double ang) {return Point(cos(ang) * p.x - sin(ang) * p.y, sin(ang) * p.x + cos(ang) * p.y); };
+Point rot90(Point p) { return Point(-p.y, p.x); };
+
 // 点と点の距離
-double getDistance(Point a, Point b) {
+long double getDistance(Point a, Point b) {
   return abs(a - b);
 };
 
 // 点と直線の距離
-double getDistanceLP(Line l, Point p) {
+long double getDistanceLP(Line l, Point p) {
   return abs(cross(l.p2 - l.p1, p - l.p1) / abs(l.p2 - l.p1));
 };
 
 // 点と線分の距離
-double getDistanceSP(Segment s, Point p) {
+long double getDistanceSP(Segment s, Point p) {
   if (dot(s.p2 - s.p1, p - s.p1) < 0.0) return abs(p - s.p1);
   if (dot(s.p1 - s.p2, p - s.p2) < 0.0) return abs(p - s.p2);
   return getDistanceLP(s, p);
@@ -140,18 +144,15 @@ bool intersect(Circle c1, Circle c2) {
 };
 
 // 線分と線分の距離
-double getDistance(Segment s1, Segment s2) {
+long double getDistance(Segment s1, Segment s2) {
   if (intersect(s1, s2)) return 0.0;
   return min(min(getDistanceSP(s1, s2.p1), getDistanceSP(s1, s2.p2)), min(getDistanceSP(s2, s1.p1), getDistanceSP(s2, s1.p2)));
 };
 
 // 線分と線分の交点(必ず交点があり、それがどちらかの端点出ない)
 Point getCrossPoint(Segment s1, Segment s2) {
-  Vector base = s2.p2 -s2.p1;
-  double d1 = abs(cross(base, s1.p1 - s2.p1));
-  double d2 = abs(cross(base, s1.p2 - s2.p1));
-  double t = d1/ (d1 + d2);
-  return s1.p1 + (s1.p2 - s1.p1) * t;
+  long double d = cross(s2.p2-s2.p1, s1.p2-s1.p1);
+  return s1.p1 + (s1.p2-s1.p1) * cross(s2.p2-s2.p1, s2.p2-s1.p1) / d;
 };
 
 // 円cと線分lの交点
@@ -159,20 +160,27 @@ pair<Point, Point> getCrossPoints(Circle c, Line l) {
   assert(intersect(c, l));
   Vector pr = project(l, c.c);
   Vector e = (l.p2 - l.p1) / abs(l.p2 - l.p1);
-  double base = sqrt(c.r * c.r - norm(pr - c.c));
+  long double base = sqrtl(c.r * c.r - norm(pr - c.c));
   return make_pair(pr + e * base, pr - e * base);
 };
 
-double arg(Vector p) { return atan2(p.y, p.x); };
-Vector polar(double a, double r) { return Point(cos(r) * a, sin(r) * a); };
+long double arg(Vector p) { return atan2(p.y, p.x); };
+Vector polar(long double a, long double r) { return Point(cos(r) * a, sin(r) * a); };
 
 // circle c1とcircle c2の交点
 pair<Point, Point> getCrossPoints(Circle c1, Circle c2) {
   assert(intersect(c1, c2));
-  double d = abs(c1.c - c2.c);
-  double a = acos((c1.r * c1.r + d * d - c2.r * c2.r) / (2 * c1.r * d));
-  double t = arg(c2.c - c1.c);
+  long double d = abs(c1.c - c2.c);
+  long double a = acos((c1.r * c1.r + d * d - c2.r * c2.r) / (2 * c1.r * d));
+  long double t = arg(c2.c - c1.c);
   return make_pair(c1.c + polar(c1.r, t + a), c1.c + polar(c1.r, t - a));
+};
+
+// 外心
+Point gaisin(Point a, Point b, Point c) {
+  Line ab = {(a+b)/2, (a+b)/2 + rot90(a-b)};
+  Line bc = {(b+c)/2, (b+c)/2 + rot90(b-c)};
+  return getCrossPoint(ab, bc);
 };
 
 typedef vector<Point> Polygon;
