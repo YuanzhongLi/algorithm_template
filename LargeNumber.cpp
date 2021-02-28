@@ -1,10 +1,11 @@
-#define LOCAL
+// #define LOCAL
 #ifdef LOCAL
 #define _GLIBCXX_DEBUG
 #endif
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
 #define rep(i,s,n) for (int i = (ll)s; i < (ll)n; i++)
 #define rrep(i,n,e) for (int i = (ll)n; i > (ll)e; i--)
 #define ll long long
@@ -36,8 +37,7 @@ typedef vector<vector<PLL>> vvpl;
 typedef vector<char> vch;
 typedef vector<vector<char>> vvch;
 
-constexpr ll LINF = 1001002003004005006ll;
-constexpr int INF = 1002003004;
+constexpr ll INF = 1001002003004005006ll;
 constexpr int n_max = 2e5+10;
 
 template<class T>
@@ -114,61 +114,132 @@ void print(vector<vector<T>> &df) {
   }
 };
 
-struct Edge {
-  int to;
-};
-using Graph = vector<vector<Edge>>;
-using P = pair<long, long>;
-
-/* Lowlink: グラフの関節点・橋を列挙する構造体
-    作成: O(E+V)
-    関節点の集合: vector<int> aps
-    橋の集合: vector<P> bridges
-*/
-struct LowLink {
-  const Graph &G;
-  vector<int> used, ord, low;
-  vector<int> aps;  // articulation points
-  vector<P> bridges;
-
-  LowLink(const Graph &G_) : G(G_) {
-    used.assign(G.size(), 0);
-    ord.assign(G.size(), 0);
-    low.assign(G.size(), 0);
-    int k = 0;
-    for (int i = 0; i < (int)G.size(); i++) {
-      if (!used[i]) k = dfs(i, k, -1);
-    }
-    sort(aps.begin(), aps.end()); // 必要ならソートする
-    sort(bridges.begin(), bridges.end()); // 必要ならソートする
+int digit(int x) {
+  int ret = 0;
+  while (x) {
+    x /= 10;
+    ret++;
   }
+  return ret;
+};
 
-  int dfs(int id, int k, int par) { // id:探索中の頂点, k:dfsで何番目に探索するか, par:idの親
-    used[id] = true;
-    ord[id] = k++;
-    low[id] = ord[id];
-    bool is_aps = false;
-    int count = 0; // 子の数
-    for (auto &e : G[id]) {
-      if (!used[e.to]) {
-        count++;
-        k = dfs(e.to, k, id); // TODO: 返り値使用していない
-        low[id] = min(low[id], low[e.to]);
-        if (par != -1 && ord[id] <= low[e.to]) is_aps = true;
-        if (ord[id] < low[e.to]) bridges.emplace_back(min(id, e.to), max(id, e.to)); // 条件を満たすので橋
-      } else if (e.to != par) { // eが後退辺の時
-        low[id] = min(low[id], ord[e.to]);
-      }
+int toI(vector<int> &K, int l, int r) {
+  int ret = 0;
+  int j = r-l;
+  rep(i, l, r+1) {
+    ret += K[i] * POW(10, j);
+    j--;
+  }
+  return ret;
+}
+
+vector<int> toD (int x) { // 123 -> [3, 2, 1]
+  vi ret;
+  while (x) {
+    ret.pb(x%10);
+    x/=10;
+  }
+  return ret;
+}
+
+int div(int x, vi K) {
+  int dk = K.size();
+  int l = 0, r = 0;
+  while (r < dk) {
+    int k = toI(K, l, r);
+    if (k >= x) {
+      int re = k%x;
+      auto re_d = toD(re);
+      rep(i, 0, re_d.size()) K[r-i] = re_d[i];
+      l = r+1-re_d.size();
+    } else {
+      if (r == dk-1) return k;
+      else r++;
     }
-    if (par == -1 && count >= 2) is_aps = true;
-    if (is_aps) aps.push_back(id);
-    return k;
   }
 };
 
-int main() {
+vi sub(int x, vi K) {
+  vi X = toD(x);
+  reverse(All(K));
+  int carry = 0;
+  rep(i, 0, K.size()) {
+    int xi = 0;
+    if (i < X.size()) xi = X[i];
+    int ki = K[i];
+    int nxt_carry = 0;
+    if (carry) {
+      if (ki == 0) {
+        ki = 9;
+        nxt_carry = 1;
+      } else ki--;
+    }
+
+    if (ki >= xi) {
+      K[i] = ki-xi;
+    } else {
+      nxt_carry = 1;
+      ki += 10;
+      K[i] = ki-xi;
+    }
+    carry = nxt_carry;
+  }
+  reverse(All(K));
+  return K;
+}
+
+signed main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
+
+  int N, a; cin >> N >> a; a--;
+  string tmp_k; cin >> tmp_k;
+  vi K;
+  for (char ch: tmp_k) {
+    K.pb((int)ch-'0');
+  }
+  vi B(N); rep(i, 0, N) { cin >> B[i]; B[i]--; }
+
+  vi way;
+  way.pb(a);
+  set<int> s;
+  int roop_s_idx;
+  rep(i, 0, n_max) {
+    int prev = way.back();
+    int nxt = B[prev];
+    if (Find(s, nxt)) {
+      rep(i, 0, way.size()) {
+        if (way[i] == nxt) {
+          roop_s_idx = i;
+          break;
+        }
+      }
+      break;
+    } else {
+      way.pb(nxt);
+      s.insert(nxt);
+    }
+  }
+  debug(way);
+  int to_roop_s = roop_s_idx-1;
+  vi roop; rep(i, roop_s_idx, way.size()) roop.pb(way[i]);
+  int roop_size = roop.size();
+  debug(roop);
+
+  int dk = K.size();
+  if (dk > 7) {
+    K = sub(to_roop_s, K);
+    int re = div(roop_size, K);
+    int idx = (re-1+roop_size) % roop_size;
+    cout << roop[idx]+1 << endl;
+  } else {
+    int k = toI(K, 0, K.size()-1);
+    int ans = a;
+    rep(i, 0, k) {
+      ans = B[ans];
+    }
+    cout << ans+1 << endl;
+  }
 
   return 0;
 };

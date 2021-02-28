@@ -5,6 +5,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
 #define rep(i,s,n) for (int i = (ll)s; i < (ll)n; i++)
 #define rrep(i,n,e) for (int i = (ll)n; i > (ll)e; i--)
 #define ll long long
@@ -36,8 +37,7 @@ typedef vector<vector<PLL>> vvpl;
 typedef vector<char> vch;
 typedef vector<vector<char>> vvch;
 
-constexpr ll LINF = 1001002003004005006ll;
-constexpr int INF = 1002003004;
+constexpr ll INF = 1001002003004005006ll;
 constexpr int n_max = 2e5+10;
 
 template<class T>
@@ -114,59 +114,62 @@ void print(vector<vector<T>> &df) {
   }
 };
 
-struct Edge {
-  int to;
-};
-using Graph = vector<vector<Edge>>;
-using P = pair<long, long>;
-
-/* Lowlink: グラフの関節点・橋を列挙する構造体
-    作成: O(E+V)
-    関節点の集合: vector<int> aps
-    橋の集合: vector<P> bridges
-*/
-struct LowLink {
-  const Graph &G;
-  vector<int> used, ord, low;
-  vector<int> aps;  // articulation points
-  vector<P> bridges;
-
-  LowLink(const Graph &G_) : G(G_) {
-    used.assign(G.size(), 0);
-    ord.assign(G.size(), 0);
-    low.assign(G.size(), 0);
-    int k = 0;
-    for (int i = 0; i < (int)G.size(); i++) {
-      if (!used[i]) k = dfs(i, k, -1);
-    }
-    sort(aps.begin(), aps.end()); // 必要ならソートする
-    sort(bridges.begin(), bridges.end()); // 必要ならソートする
-  }
-
-  int dfs(int id, int k, int par) { // id:探索中の頂点, k:dfsで何番目に探索するか, par:idの親
-    used[id] = true;
-    ord[id] = k++;
-    low[id] = ord[id];
-    bool is_aps = false;
-    int count = 0; // 子の数
-    for (auto &e : G[id]) {
-      if (!used[e.to]) {
-        count++;
-        k = dfs(e.to, k, id); // TODO: 返り値使用していない
-        low[id] = min(low[id], low[e.to]);
-        if (par != -1 && ord[id] <= low[e.to]) is_aps = true;
-        if (ord[id] < low[e.to]) bridges.emplace_back(min(id, e.to), max(id, e.to)); // 条件を満たすので橋
-      } else if (e.to != par) { // eが後退辺の時
-        low[id] = min(low[id], ord[e.to]);
-      }
-    }
-    if (par == -1 && count >= 2) is_aps = true;
-    if (is_aps) aps.push_back(id);
-    return k;
-  }
+// x mod m (m >= 1)
+long long safe_mod(long long x, long long m) {
+  x %=m; if (x < 0) x+= m;
+  return x;
 };
 
-int main() {
+// pair(g, x): g = gcd(a, b), xa = g (mod b), 0 <= x < b/g
+pair<long long, long long> inv_gcd(long long a, long long b) {
+  a = safe_mod(a, b);
+  if (a == 0) return {b, 0};
+
+  long long s = b, t = a;
+  long long m0 = 0, m1 = 1;
+  while (t) {
+    long long u = s/t;
+    s -= t*u;
+    m0 -= m1*u;
+    auto tmp = s;
+    s = t;
+    t = tmp;
+    tmp = m0;
+    m0 = m1;
+    m1 = tmp;
+  }
+  if (m0 < 0) m0 += b/s;
+  return {s, m0};
+};
+
+pair<long, long> crt(const vector<long long> &r, const vector<long long> &m) {
+  assert(r.size() == m.size());
+  int n = r.size();
+  long long r0 = 0, m0 = 1;
+  for (int i = 0; i < n; i++) {
+    assert(1 <= m[i]);
+    long long r1 = safe_mod(r[i], m[i]), m1 = m[i];
+    if (m0 < m1) { swap(r0, r1); swap(m0, m1); }
+    if (m0 % m1 == 0) {
+      if (r0 % m1 != r1) return {0, 0};
+      continue;
+    }
+    long long g, im;
+    tie(g, im) = inv_gcd(m0, m1);
+    long long u1 = (m1/g);
+    if ((r1-r0) % g) return {0, 0};
+    long long x = (r1-r0)/g % u1 * im % u1;
+    r0 += x * m0;
+    m0 *= u1;
+    if (r0 < 0) r0 += m0;
+  }
+  return {r0, m0};
+};
+
+// VERIFICATIOIN: ABC 193_E
+// URL: https://atcoder.jp/contests/abc193/submissions/20568498
+
+signed main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
 

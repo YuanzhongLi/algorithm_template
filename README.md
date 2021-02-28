@@ -1,5 +1,8 @@
 # Algorithm template for competitive programming
 
+### EUCLID
+ユークリッドの互助法をまとめたライブラリ
+[詳細](./EUCLID/README.md)
 ### POINT
 幾何計算を扱うためのライブラリ
 ### GaussJordan

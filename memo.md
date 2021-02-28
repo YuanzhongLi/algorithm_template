@@ -116,3 +116,30 @@ if ((long double)a * (long double)b < INF) {
 
 }
 ```
+
+### 9. 繰り上げ繰り下げ
+正負で別れることに注意  
+ex) 繰り下げ  
+2021 -> 2020, -2021 -> -2030
+ex) 繰り上げ
+2021 -> 2030, -2021 -> -2020
+```
+int carry_up(int x, int d) {
+  int x_ = abs(x);
+  if (x < 0) return -(x_/d);
+  else return (x_+d-1)/d;
+};
+
+int carry_down(int x, int d) {
+  int x_ = abs(x);
+  if (x < 0) return -((x_+d-1)/d);
+  else return x_/d;
+};
+```
+
+### 10. 小数を整数で扱う
+```
+ld a = 1039.3844
+int a = round(a*10000)
+// a = 10393844
+```
