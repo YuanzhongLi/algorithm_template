@@ -1,4 +1,4 @@
-## 一般のm項間漸化式
+### 一般のm項間漸化式
 code cf) [matrix.cpp](./matrix.cpp)
 
 ```math
@@ -56,7 +56,7 @@ a_{n} \\
 \end{bmatrix}
 ```
 
-## Matrix Power Series
+### Matrix Power Series
 code cf) [Matrix_Power_Series.cpp](./Matrix_Power_Series.cpp)
 
 制約
@@ -93,6 +93,5 @@ I \\
 ```
 よって$\begin{pmatrix} A & 0 \\ I & I\end{pmatrix}^k$を求めることで$S_k$が求まる。
 
-
-
-
+### Mod Matrix
+[Mod_Matrix.cpp](./Mod_Matrix.cpp)  
