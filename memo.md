@@ -143,3 +143,10 @@ ld a = 1039.3844
 int a = round(a*10000)
 // a = 10393844
 ```
+
+### 11. 詳細debug
+```
+$ g++ -f -o file file.cpp
+$ lldb -f ./file
+(lldb) run
+```

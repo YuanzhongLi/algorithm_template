@@ -102,11 +102,11 @@ std::istream &operator>>(std::istream &in, modint<MOD> &m) {
   long long a; in >> a; m = mint(a); return in;
 };
 
-mint fact[200005];
+mint fact[500005];
 
 void init() {
   fact[0] = mint(1);
-  for(int i = 1; i < 200005; i++) {
+  for(int i = 1; i < 500005; i++) {
     fact[i] = fact[i-1] * mint(i);
   }
 };
@@ -114,6 +114,11 @@ void init() {
 // calculate nCr mod
 mint modcomb(long long n, long long r) {
   return fact[n] / fact[r] / fact[n - r];
+};
+
+// caluculate nPr mod
+mint modp(long long n, long long r) {
+  return fact[n]/fact[n-r];
 };
 
 int main() {
