@@ -110,6 +110,7 @@ void print(vector<vector<T>> &df) {
   }
 }
 
+// 無向
 vvi graph;
 vi used;
 // 最終的にルーブに含まれるある頂点が返さられる(-1のとき閉路なし)

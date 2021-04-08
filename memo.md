@@ -150,3 +150,20 @@ $ g++ -f -o file file.cpp
 $ lldb -f ./file
 (lldb) run
 ```
+
+### 12. long long 想定でのbit演算
+必ず1ll !  
+```
+1ll << num
+```
+
+### 13. 構造体定義
+```
+struct Edge {
+  int to, id;
+  Edge(int to, int id): to(to), id(id) {}
+};
+
+vector<Edge> V;
+V.emplace_back(to, id);
+```

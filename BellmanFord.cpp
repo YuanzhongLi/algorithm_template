@@ -18,8 +18,8 @@ template<class T>
 inline bool chmin(T &a, T b) { if(a>b) { a=b; return true; } return false; };
 
 
-// VERIFICATIOIN: ABC 137_E
-// URL: https://atcoder.jp/contests/abc137/submissions/18412024
+// VERIFICATIOIN: ABC 61_D
+// URL: https://atcoder.jp/contests/abc061/submissions/21452609
 
 // 単一始点全点間最短路を求めるアルゴリズム。単一始点全点間最短路を求めるアルゴリズム。負辺があっても動作する。また負閉路も検出する。
 // 計算量 O(V * E)
@@ -30,7 +30,7 @@ struct Edge {
   int from, to, cost;
 };
 
-vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
+tuple<vector<int>, vector<bool>, bool> bellman_ford(int s, int V, vector<Edge> &edges) {
   vector<int> dist(V, INF);
   dist[s] = 0;
   rep(i, 0, V - 1) {
@@ -41,21 +41,21 @@ vector<int> bellman_ford(int s, int V, vector<Edge> &edges) {
     }
   }
 
-  bool flag = true;
+  vector<bool> neg(V, false);
+
+  bool flag = false; // has negative loop
   rep(i, 0, edges.size()) {
     struct Edge e = edges[i];
     if (dist[e.from] == INF) continue;
-    // detect negative roop
+    // detect negative loop
     if (dist[e.from] + e.cost < dist[e.to]) {
-      flag = false;
-      break;
+      dist[e.to] = dist[e.from] + e.cost;
+      neg[e.to] = true;
+      flag = true;
     }
+
+    if (neg[e.from]) neg[e.to] = true;
   }
 
-  if (flag) {
-    return dist;
-  } else {
-    vector<int> neg; // return empty vector<int>
-    return neg;
-  }
+  return {dist, neg, flag};
 };

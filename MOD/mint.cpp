@@ -90,6 +90,17 @@ class modint {
     }
     return res;
   }
+  friend constexpr modint modinv(const modint &rhs) noexcept {
+    i64 a_ = rhs.a, b = Modulus, u = 1, v = 0;
+    while(b){
+      i64 t = a_/b;
+      a_ -= t * b; swap(a_,b);
+      u -= t * v; swap(u,v);
+    }
+    u %= Modulus;
+    if(u < 0) u += Modulus;
+    return modint(u);
+  };
 };
 
 const long long MOD = 1e9+7;
