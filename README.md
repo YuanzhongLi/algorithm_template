@@ -12,6 +12,21 @@
 modを扱うライブラリ  
 ### POINT
 幾何計算を扱うためのライブラリ
+
+### TREE
+木について
+##### 1. Ancestor
+[ancestor.cpp](./TREE/ancestor.cpp)
+u, vについてuがvの先祖かどうかを求める  
+事前にDFSを行う O(V)
+クエリ O(1)
+
+##### 2. LCA
+[LCA.cpp](./TREE/LCA.cpp)
+u, vの最も近い共通先祖を求める
+DFSで親を求めた後、それぞれの頂点について2^k個先の先祖を求める O(V + VlogV)
+クエリ O(logN)
+
 ### GaussJordan
 連立方程式をとく  
 [GaussJordan.cpp](./GaussJordan.cpp)  

@@ -12,7 +12,7 @@ class LCA {
 public:
   int V, logV; // V: node num
   vector<int> depth, dist;
-  vector<vector<int> > parent;
+  vector<vector<int>> parent; // parent[k][v], go back 2^k
 
   LCA(int V) {
     this->V = V;
@@ -20,7 +20,7 @@ public:
     while (V > (1LL<<logV)) logV++;
     this->depth = vector<int>(V);
     this->dist = vector<int>(V);
-    this->parent = vector<vector<int> >(logV, vector<int>(V));
+    this->parent = vector<vector<int>>(logV, vector<int>(V));
   }
 
   void init(int v, int par, int d, int l) { // dfs: calculate dist and parent
