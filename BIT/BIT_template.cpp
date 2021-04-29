@@ -118,6 +118,12 @@ public:
     }
     return ret + 1;
   }
+
+  // debug
+  void show() {
+    for (int i = 0; i < n; i++) cout << sum_between(i,i) << " ";
+    cout << endl;
+  }
 };
 
 int main() {
