@@ -66,7 +66,7 @@ inline bool chmin(T &a, T b) {
 
 // AOJ DSL_2_B
 
-// 0-indexed;
+// 0-indexed
 template<class I, class BiOp>
 class SegTree {
   int n;

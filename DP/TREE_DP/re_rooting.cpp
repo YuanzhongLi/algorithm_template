@@ -200,7 +200,7 @@ mint modcomb(long long n, long long r) {
   return fact[n] / fact[r] / fact[n - r];
 };
 
-// VERIFICATION: ABC 164_F
+// VERIFICATION: ABC 173_F
 
 // sum_t: 単位元の型（つまりdpで保持するデータの型）, key_t: 辺データの型
 template< typename sum_t, typename key_t >
