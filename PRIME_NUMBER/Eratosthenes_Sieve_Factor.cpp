@@ -38,25 +38,8 @@ typedef vector<PLL> vpl;
 typedef vector<vector<PLL>> vvpl;
 typedef vector<vector<vector<PLL>>> vvvpl;
 
-int POWINT(int x, int n) {
-  int ret = 1;
-  while (n > 0) {
-    if (n & 1) ret *= x;
-    x *= x;
-    n >>= 1;
-  }
-  return ret;
-};
-
-ll POWLL(ll x, int n) {
-  ll ret = 1;
-  while (n > 0) {
-    if (n & 1) ret *= x;
-    x *= x;
-    n >>= 1;
-  }
-  return ret;
-};
+template<class T, class U>
+T POW(T x, U n) {T ret=1; while (n>0) {if (n&1) {ret*=x;} x*=x; n>>=1;} return ret;};
 
 template<class T>
 inline bool chmax(T &a, T b) {
@@ -265,6 +248,33 @@ public:
     return res;
   }
 };
+
+// 小さいnCrを求める
+Sieve si(65);
+int comb(int n, int r) {
+  chmin(r, n-r);
+  unordered_map<int,int> mp;
+  rep(i,n-r+1,n+1) {
+    auto factor = si.factor(i);
+    for (auto &pi: factor) {
+      int p = pi.first, num = pi.second;
+      mp[p] += num;
+    }
+  }
+
+  rep(i,2,r+1) {
+    auto factor = si.factor(i);
+    for (auto &pi: factor) {
+      int p = pi.first, num = pi.second;
+      mp[p] -= num;
+    }
+  }
+  int ret = 1;
+  for (auto &pi: mp) {
+    ret *= POW(pi.first, pi.second);
+  }
+  return ret;
+}
 
 // ABC 152E
 
