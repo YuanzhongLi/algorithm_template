@@ -5,16 +5,16 @@ class Unionfind {
 public:
   int N;
   vector<int> par; // parent
-  vector<int> rank; // 木の高さ
-  vector<int> size; // 節点が属する木の節点数
-  int treeNum; // 木の数
+  vector<int> rank; // tree hight
+  vector<int> size; // root node numbers
+  int treeNum; // tree number
   Unionfind(int N) : N(N), par(N), rank(N, 0), size(N, 1) {
     for (int i = 0; i < N; i++) {
       par[i] = i;
     }
     treeNum = N;
   }
-  // 節点(木)追加
+  // add node
   void addNode() {
     par.push_back(N);
     rank.push_back(0);
@@ -22,15 +22,12 @@ public:
     N++;
     treeNum++;
   }
-  // 根を探すと同時に経路上にある節点の親が根になるように代入
   int root(int x) {
     return par[x] == x ? x : par[x] = root(par[x]);
   }
-  // 同じ木に属しているか
   bool same(int x, int y) {
     return root(x) == root(y);
   }
-  // rankが低い方の木をrankが高い方の木の根に結びつける(結びつけた後の新しい木の高さが高くなることがないため)
   void unite(int x, int y) {
     x = root(x);
     y = root(y);
