@@ -13,12 +13,16 @@ modを扱うライブラリ
 ### POINT
 幾何計算を扱うためのライブラリ
 
+### SUFFIX ARRAY
+suffix arrayを求める
+[詳細](./SUFFIX_ARRAY/README.md)
+
 ### TREE
 木について
 
 ##### 1. MINIMUM_SPANNING_TREE
 最小全域木を求める  
-[クラスカル法](./MINIMUM_SPANNING_TREE/Kruskal.cpp) を使うと良い  
+[クラスカル法](./TREE/MINIMUM_SPANNING_TREE/Kruskal.cpp)を使うと良い  
 ##### 2. Ancestor
 [ancestor.cpp](./TREE/ancestor.cpp)
 u, vについてuがvの先祖かどうかを求める  
