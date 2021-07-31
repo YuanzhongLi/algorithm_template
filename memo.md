@@ -152,7 +152,7 @@ $ lldb -f ./file
 ```
 
 ### 12. long long 想定でのbit演算
-必ず1ll !  
+必ず**1ll** !  
 ```
 1ll << num
 ```
