@@ -121,8 +121,12 @@ public:
 
   // debug
   void show() {
+    #ifdef LOCAL
     for (int i = 0; i < n; i++) cout << sum_between(i,i) << " ";
     cout << endl;
+    #else
+    return;
+    #endif
   }
 };
 
