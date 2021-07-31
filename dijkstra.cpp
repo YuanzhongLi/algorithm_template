@@ -116,6 +116,7 @@ public:
     while (!PQ.empty()) {
       auto f = PQ.top(); PQ.pop();
       int u = f.second;
+      if (color[u] == BLACK) continue;
       color[u] = BLACK;
 
       for (int j = 0; j < graph[u].size(); j++) {
