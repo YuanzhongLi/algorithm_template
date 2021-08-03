@@ -174,6 +174,63 @@ public:
   }
 };
 
+class AuxiliaryTree {
+public:
+  int V;
+  vector<vector<int>> tree;
+  vector<int> fs, ls; // fs[v]: ET上の頂点vの最初の出現位置, ls[v]: ET上の頂点vの最後の出現位置
+  LCA lca;
+
+  vector<vector<int>> T; // auxiliary_tree graph
+
+  AuxiliaryTree(vector<vector<int>> in_tree): lca(in_tree) {
+    this->V = in_tree.size();
+    this->tree = in_tree;
+    lca.build();
+
+    this->fs = vector<int>(V);
+    this->ls = vector<int>(V);
+    int cur = 0;
+    et_dfs(0,-1,cur);
+
+    this->T = vector<vector<int>>(V);
+  }
+
+  void et_dfs(int u, int p, int &cur) { // Euler tour
+    fs[u] = cur++;
+    for (int v: tree[u]) {
+      if (v == p) continue;
+      et_dfs(v, u, cur);
+    }
+    ls[u] = cur++;
+  }
+
+  void add_aux_edge(int u, int v) {
+    T[u].pb(v);
+    T[v].pb(u);
+  }
+
+  int query(vector<int> &vs) {
+    sort(vs.begin(), vs.end(), [&](int u, int v) { return fs[u]<fs[v]; });
+    vs.erase(unique(vs.begin(),vs.end()),vs.end());
+
+    int K = vs.size();
+    for (int i=0; i < K-1; i++) vs.push_back(lca.query(vs[i], vs[i+1]));
+    sort(vs.begin(), vs.end(), [&](int u, int v) { return fs[u]<fs[v]; });
+    vs.erase(unique(vs.begin(),vs.end()),vs.end());
+
+    vector<int> stack;
+    for (int v: vs) T[v].clear();
+    for (int v: vs) {
+      while (!stack.empty() && ls[stack.back()] < fs[v]) stack.pop_back();
+      if (!stack.empty()) add_aux_edge(stack.back(), v);
+      stack.push_back(v);
+    }
+
+    return stack[0]; // return root
+  }
+};
+
 signed main() {
   ios::sync_with_stdio(false);
   cin.tie(0);

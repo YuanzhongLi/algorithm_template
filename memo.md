@@ -89,6 +89,14 @@ __builtin_popcountll(<long long int>)
 auto function = [&]() {
     return ;
 };
+
+function<int(int,int)> dfs = [&](int u, int p) {
+  for (int v: g[u]) {
+    if (v == p) continue;
+    vs[u] += dfs(v, u);
+  }
+  return vs[u];
+}; // ;を忘れない!
 ```
 
 ### 7. multisetでのerase

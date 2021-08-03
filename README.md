@@ -39,10 +39,23 @@ u, vについてuがvの先祖かどうかを求める
 クエリ O(1)
 
 3. **LCA**
-[LCA (Code)](./TREE/LCA.cpp)
+- [LCA (Code)](./TREE/LCA.cpp)
 u, vの最も近い共通先祖を求める
 DFSで親を求めた後、それぞれの頂点について2^k個先の先祖を求める O(V + VlogV)
-クエリ O(logN)
+```
+lca.get_distance(u, v); // 距離を求める
+```
+
+- [LCA 重み付き (Code)](./TREE/LCA_cost.cpp)
+重み付き木でのLCA
+
+4. **Auxiliary Tree**
+ある点集合とそのlcaを含めた点集合からなる木
+事前にEuler Tourで入るときと出たときを記録し、対象となる点集合を入った順でソートした後にnode i, node i+1の lcaを追加して構築
+- [Auxiliary Tree (Code)](./TREE/Auxiliary_Tree.cpp)
+- [Auxiliary Tree 重み付き (Code)](./TREE/Auxiliary_Tree_cost.cpp)
+
+
 ### loop
 ある範囲(N)から同じ範囲の数へと変遷するときK回後の結果を求める  
 O(N)
